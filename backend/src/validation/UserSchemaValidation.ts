@@ -2,10 +2,10 @@ import {
     IsString, 
     MinLength, 
     IsEmail, 
-    IsNotEmpty, 
-    Equals,
-    ValidateIf
+    IsNotEmpty
 } from "class-validator";
+
+import { Match } from "./MatchDecorator";
 
 export class UserSchemaValidation {
 
@@ -21,11 +21,7 @@ export class UserSchemaValidation {
     @IsString()
     password!: string;
 
-    /**
-     * VALIDAR A CONFIRMAÇÃO DE SENHA
-     */
-
-    // @Equals(, { message: "As senhas devem ser iguais" })
+    @Match("password", { message: "As senhas devem ser iguais" })
     @IsNotEmpty({ message: "A confirmação de senha é obrigatória" })
     @IsString()
     confirmPassword!: string;
