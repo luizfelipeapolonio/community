@@ -5,6 +5,7 @@ import "reflect-metadata";
 import express from "express";
 import path from "node:path";
 import cors from "cors";
+
 import router from "./routes/Router";
 
 import { DBConnection } from "../config/db";
@@ -12,7 +13,9 @@ import { DBConnection } from "../config/db";
 // DB and env variables configuration
 import { config } from "../config/default";
 
+// Winston and Morgan loggers
 import Logger from "../config/logger";
+import morganMiddleware from "./middlewares/morganMiddleware";
 
 class App {
     private app = express();
@@ -27,6 +30,8 @@ class App {
         // Upload directory
         this.app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
+        this.app.use(morganMiddleware);
+
         // Load routes
         this.app.use(router);
 
@@ -34,9 +39,10 @@ class App {
     }   
 
     private async startApp(): Promise<void> {
-        const { port } = config;
+        const port: number | undefined = config.port ? parseInt(config.port) : undefined;
 
         if(port === undefined) {
+            Logger.error("Porta não definida no arquivo .env");
             return;
         }
 

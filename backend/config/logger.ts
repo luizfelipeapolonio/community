@@ -18,7 +18,7 @@ const levels: LogOptions<number> = {
 };
 
 const level = (): string => {
-    const { env } = config;
+    const env: string = config.env || "development";
     const isDevelopment = env === "development";
     return isDevelopment ? "debug" : "warn";
 }
