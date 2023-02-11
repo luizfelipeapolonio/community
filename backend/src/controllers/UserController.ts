@@ -1,28 +1,34 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 
-import { config } from "../../config/default";
+import { config } from "../config/default";
 
-import Logger from "../../config/logger";
+import Logger from "../config/logger";
+
+import { UserModel } from "../models/User";
+
+import { TypedRequestBody, UserBody } from "../types/UserTypes";
+
+import { UserServices } from "../services/UserServices";
 
 export class UserController {
-    generateToken(id: string): string | void {
-        const jwtSecret: string | undefined = config.jwtSecret;
+    async register(req: TypedRequestBody<UserBody>, res: Response) {
+        // const services = new UserServices();
+        
+        // const token = services.generateToken("ayuhd7ad38");
+        // const passwordHash = await services.generatePasswordHash("teste");
+        const { name, email, password } = req.body;
 
-        if(jwtSecret === undefined) {
-            Logger.error("JWT Secret não definido no arquivo .env");
+        const user = await UserModel.findOne({ email });
+
+        if(user) {
+            res.status(422).json({ errors: "E-mail já cadastrado!"});
             return;
         }
 
-        const token: string = jwt.sign(id, jwtSecret, {
-            expiresIn: "7d"
-        });
-
-        return token;
+        // return res.json({ token, passwordHash });
     }
 
-    async register(req: Request, res: Response) {
-        return res.send("Register");
-    }
 }

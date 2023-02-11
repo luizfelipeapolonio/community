@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 
-import Logger from "../../config/logger";
+import Logger from "../config/logger";
 
 import { UserSchemaValidation } from "../validation/UserSchemaValidation";
 

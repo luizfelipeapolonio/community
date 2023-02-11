@@ -8,13 +8,13 @@ import cors from "cors";
 
 import router from "./routes/Router";
 
-import { DBConnection } from "../config/db";
+import { DBConnection } from "./config/db";
 
 // DB and env variables configuration
-import { config } from "../config/default";
+import { config } from "./config/default";
 
 // Winston and Morgan loggers
-import Logger from "../config/logger";
+import Logger from "./config/logger";
 import morganMiddleware from "./middlewares/morganMiddleware";
 
 class App {
