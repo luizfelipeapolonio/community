@@ -1,10 +1,10 @@
 import { Request } from "express";
 
-export interface TypedRequestBody<T> extends Request {
+export interface ITypedRequestBody<T> extends Request {
     body: T;
 }
 
-export interface UserBody {
+export interface UserRegisterBody {
     name: string;
     email: string;
     password: string;

@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { Types } from "mongoose";
 
 import { config } from "../config/default";
 
 import Logger from "../config/logger";
 
 export class UserServices {
-    generateToken(id: string): string | null {
+    generateToken(id: Types.ObjectId): string | null {
         const jwtSecret: string | undefined = config.jwtSecret;
     
         if(jwtSecret === undefined) {
@@ -29,7 +30,7 @@ export class UserServices {
             return passwordHash;
 
         } catch(error: any) {
-            Logger.error("Ocorreu um erro --> " + `Erro: ${error}`);
+            Logger.error("Erro ao gerar passwordHash --> " + `Erro: ${error}`);
             return null;
         }
     }

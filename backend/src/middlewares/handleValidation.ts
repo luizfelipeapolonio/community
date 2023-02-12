@@ -12,11 +12,20 @@ export class HandleValidation {
 
         await validate(bodyObject).then((err) => {
             if(err.length > 0) {
-                Logger.error("User validation failed!");
+                const messages = err.map((item) => {
+                   return { [item.property]: item.constraints } 
+                });
+
+                Logger.error("Dados de usuário inválidos! --> " + err);
                 console.log(err);
-                return res.status(422).json({ errors: err });
+
+                return res.status(422).json({ 
+                    status: "error",
+                    message: messages,
+                    payload: null 
+                });
             } else {
-                Logger.info("Validation succeed!");
+                Logger.info("Usuário validado com sucesso!");
                 return next();
             }
         });
