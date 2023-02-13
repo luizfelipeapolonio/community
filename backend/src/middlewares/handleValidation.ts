@@ -6,6 +6,7 @@ import Logger from "../config/logger";
 
 import { UserRegisterSchemaValidation } from "../validation/UserRegisterSchemaValidation";
 import { UserLoginSchemaValidation } from "../validation/UserLoginSchemaValidation";
+import { UserUpdateSchemaValidation } from "../validation/UserUpdateSchemaValidation";
 
 export class HandleValidation {
     async userRegisterValidation(req: Request, res: Response, next: NextFunction) {
@@ -51,6 +52,30 @@ export class HandleValidation {
                 });
             } else {
                 Logger.info("Dados de login validados com sucesso!");
+                return next();
+            }
+        });
+    }
+
+    async userUpdateValidation(req: Request, res: Response, next: NextFunction) {
+        const bodyObject = plainToInstance(UserUpdateSchemaValidation, req.body);
+
+        await validate(bodyObject).then((err) => {
+            if(err.length > 0) {
+                const messages = err.map((item) => {
+                    return { [item.property]: item.constraints };
+                });
+
+                Logger.error("Dados de atualização inválidos! --> " + err);
+                console.log(err);
+
+                return res.status(422).json({ 
+                    status: "error",
+                    message: messages,
+                    payload: null 
+                });
+            } else {
+                Logger.info("Dados de atualização validados com sucesso!");
                 return next();
             }
         });

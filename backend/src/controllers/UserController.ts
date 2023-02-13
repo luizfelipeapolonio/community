@@ -96,7 +96,7 @@ export class UserController {
             });
         }
 
-        // Signed user payload response
+        // Signed in user payload response
         const signedUser = {
             _id: user._id,
             profileImage: user?.profileImage,
@@ -119,6 +119,11 @@ export class UserController {
             message: "Usuário logado",
             payload: user
         });
+    }
+
+    // Update user data
+    async update(req: Request, res: Response) {
+        return res.send("Update");
     }
 
 }

@@ -3,13 +3,10 @@ import { Router, Request, Response } from "express";
 // Middlewares
 import { HandleValidation } from "../middlewares/handleValidation";
 import { AuthGuard } from "../middlewares/authGuard";
+import { ImageUpload } from "../middlewares/imageUpload";
 
 // Controllers
 import { UserController } from "../controllers/UserController";
-
-import { config } from "../config/default";
-import Logger from "../config/logger";
-import jwt, {JwtPayload}from "jsonwebtoken";
 
 export class UserRoutes {
     private router = Router();
@@ -18,6 +15,7 @@ export class UserRoutes {
         const validate = new HandleValidation();
         const user = new UserController();
         const auth = new AuthGuard();
+        const image = new ImageUpload();
 
         this.router.get("/test", (req: Request, res: Response) => {
             return res.send("User routes is working");
@@ -25,6 +23,13 @@ export class UserRoutes {
         this.router.post("/register", validate.userRegisterValidation, user.register);
         this.router.post("/login", validate.userLoginValidation, user.login);
         this.router.get("/profile", auth.execute, user.getCurrentUser);
+        this.router.patch(
+            "/", 
+            auth.execute, 
+            validate.userUpdateValidation, 
+            image.imageUpload().single("profileImage"), 
+            user.update
+        );
 
         return this.router;
     }

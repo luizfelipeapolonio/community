@@ -30,12 +30,9 @@ export class AuthGuard {
         }
 
         try{
-            const verified: string | JwtPayload = jwt.verify(token, jwtSecret);
-            let user = null;
+            const verified = jwt.verify(token, jwtSecret) as JwtPayload;
             
-            if(typeof verified !== "string") {
-                user = await UserModel.findById(verified.id).select("-password");
-            }
+            const user = await UserModel.findById(verified.id).select("-password");
 
             req.body.user = user
 
