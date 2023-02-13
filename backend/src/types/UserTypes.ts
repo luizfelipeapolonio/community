@@ -4,8 +4,13 @@ export interface ITypedRequestBody<T> extends Request {
     body: T;
 }
 
-export interface UserRegisterBody {
+export interface IUserRegisterBody {
     name: string;
+    email: string;
+    password: string;
+}
+
+export interface IUserLoginBody {
     email: string;
     password: string;
 }

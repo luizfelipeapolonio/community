@@ -7,7 +7,7 @@ import {
 
 import { Match } from "./MatchDecorator";
 
-export class UserSchemaValidation {
+export class UserRegisterSchemaValidation {
 
     @MinLength(5, { message: "O nome deve ter no mínimo 5 caracteres" })
     @IsString({ message: "O nome deve ser um texto" })

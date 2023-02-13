@@ -6,7 +6,7 @@ import { config } from "../config/default";
 
 import Logger from "../config/logger";
 
-export class UserServices {
+export class UserUtils {
     generateToken(id: Types.ObjectId): string | null {
         const jwtSecret: string | undefined = config.jwtSecret;
     
