@@ -6,7 +6,9 @@ import { UserModel } from "../models/User";
 import { 
     ITypedRequestBody, 
     IUserRegisterBody, 
-    IUserLoginBody 
+    IUserLoginBody,
+    IUserUpdateBody,
+    UserMongooseType 
 } from "../types/UserTypes";
 import { UserUtils } from "../utils/UserUtils";
 
@@ -112,7 +114,7 @@ export class UserController {
 
     // Get current signed in user
     getCurrentUser(req: Request, res: Response) {
-        const { user } = req.body;
+        const { user } = res.locals;
 
         return res.status(200).json({
             status: "success",
@@ -122,8 +124,74 @@ export class UserController {
     }
 
     // Update user data
-    async update(req: Request, res: Response) {
-        return res.send("Update");
+    async update(req: ITypedRequestBody<IUserUpdateBody>, res: Response) {
+        const { name, password, bio } = req.body;
+        const utils = new UserUtils();
+
+        let profileImage: string | null = null;
+
+        if(req.file) {
+            profileImage = req.file.filename;
+        }
+
+        // Get the user passed by authGuard middleware
+        const authUser: UserMongooseType = res.locals.user;
+
+        const user = await UserModel.findById(authUser._id).select("-password");
+
+        if(!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "Usuário não encontrado!",
+                payload: null
+            });
+        }
+
+        if(name) {
+            user.name = name;
+        }
+        
+        if(password) {
+            const passwordHash: string | null = await utils.generatePasswordHash(password);
+
+            if(passwordHash) {
+                user.password = passwordHash;
+            } else {
+                return res.status(500).json({
+                    status: "error",
+                    message: "Ocorreu um erro! Tente mais tarde",
+                    payload: null
+                });
+            }
+        }
+
+        if(bio) {
+            user.bio = bio;
+        }
+
+        if(profileImage) {
+            user.profileImage = profileImage;
+        }
+
+        try {
+            await user.save();
+    
+            return res.status(200).json({
+                status: "success",
+                message: "Usuário atualizado com sucesso!",
+                payload: user
+            });
+
+        } catch(error: any) {
+            Logger.error(
+                "Não foi possível atualizar usuário --> " + `Erro: ${error}`
+            );
+            return res.status(422).json({
+                status: "error",
+                message: "Não foi possível atualizar usuário",
+                payload: null
+            });
+        }
     }
 
 }

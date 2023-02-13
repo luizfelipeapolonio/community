@@ -34,7 +34,7 @@ export class AuthGuard {
             
             const user = await UserModel.findById(verified.id).select("-password");
 
-            req.body.user = user
+            res.locals.user = user;
 
             return next();
 
