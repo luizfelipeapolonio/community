@@ -30,6 +30,7 @@ export class UserRoutes {
             image.imageUpload().single("profileImage"), 
             user.update
         );
+        this.router.get("/:id", user.getUserById);
 
         return this.router;
     }

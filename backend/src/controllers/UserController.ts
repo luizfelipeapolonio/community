@@ -194,4 +194,34 @@ export class UserController {
         }
     }
 
+    async getUserById(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const user = await UserModel.findById(id).select("-password");
+
+            if(!user) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Usuário não encontrado!",
+                    payload: null
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Usuário encontrado",
+                payload: user
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar usuário --> " + `Erro: ${error}`);
+            return res.status(404).json({
+                status: "error",
+                message: "Erro ao buscar usuário!",
+                payload: null
+            });
+        }
+    }
+
 }
