@@ -3,13 +3,13 @@ import bcrypt from "bcryptjs";
 
 import Logger from "../config/logger";
 import { UserModel } from "../models/User";
-import { 
-    ITypedRequestBody, 
+import {
     IUserRegisterBody, 
     IUserLoginBody,
     IUserUpdateBody,
     UserMongooseType 
 } from "../types/UserTypes";
+import { ITypedRequestBody } from "../types/SharedTypes";
 import { UserUtils } from "../utils/UserUtils";
 
 export class UserController {
