@@ -28,7 +28,7 @@ export class PostController {
         if(!image) {
             return res.status(422).json({
                 status: "error",
-                message: "A foto é obrigatória",
+                message: "A imagem é obrigatória",
                 payload: null
             });
         }
@@ -73,7 +73,7 @@ export class PostController {
 
             return res.status(422).json({
                 status: "error",
-                message: "Erro ao criar post! Tente novamente",
+                message: "Erro ao criar post! Tente novamente mais tarde",
                 payload: null
             });
         }

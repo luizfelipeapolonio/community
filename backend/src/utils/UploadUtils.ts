@@ -1,24 +1,24 @@
 import { ITypedRequestBody } from "../types/SharedTypes";
 import { ICreatePostBody } from "../types/PostTypes";
 
-export class PostUtils {
+export class UploadUtils {
 
     createPostUploadValidation(req: ITypedRequestBody<ICreatePostBody>): boolean {
         const { title, tags } = req.body;
-        let status: boolean = true;
+        let upload: boolean = true;
 
         if(!title || !tags) {
-            status = false;
+            upload = false;
         }
 
         if(title && title.length < 3) {
-            status = false;
+            upload = false;
         }
         
         if(tags && tags[0] === "") {
-            status = false;
+            upload = false;
         }
 
-        return status;
+        return upload;
     }
 }
