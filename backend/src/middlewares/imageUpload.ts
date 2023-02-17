@@ -3,6 +3,11 @@ import path from "node:path";
 import crypto from "node:crypto";
 import fs from "node:fs";
 
+import { PostUtils } from "../utils/PostUtils";
+
+import { ITypedRequestBody } from "../types/SharedTypes";
+import { ICreatePostBody } from "../types/PostTypes";
+
 export class ImageUpload {
     private uploadFolder: string = path.basename(`${__dirname}/uploads`);
 
@@ -37,12 +42,18 @@ export class ImageUpload {
     imageUpload(): Multer {
         return multer({
             storage: this.imageStorage(),
-            fileFilter(req, file, cb) {
+            fileFilter(req: ITypedRequestBody<ICreatePostBody>, file, cb) {
+                const validate = new PostUtils();
+
                 if(!file.originalname.match(/\.(png|jpg)$/i)) {
                     // upload only png and jpg formats
-                    return cb(new Error("Por favor, envie apenas png ou jpg!"));
+                    req.body.error = true;
+                    return cb(null, false);
+                    // return cb(new Error("Por favor, envie apenas png ou jpg!"));
                 }
-                cb(null, true);
+
+                console.log("\n ==== Teste ====> " + validate.createPostUploadValidation(req) + "\n");
+                return cb(null, validate.createPostUploadValidation(req));
             }
         });
     }

@@ -4,9 +4,10 @@ import { validate } from "class-validator";
 
 import Logger from "../config/logger";
 
-import { UserRegisterSchemaValidation } from "../validation/UserRegisterSchemaValidation";
-import { UserLoginSchemaValidation } from "../validation/UserLoginSchemaValidation";
-import { UserUpdateSchemaValidation } from "../validation/UserUpdateSchemaValidation";
+import { UserRegisterSchemaValidation } from "../validation/user/UserRegisterSchemaValidation";
+import { UserLoginSchemaValidation } from "../validation/user/UserLoginSchemaValidation";
+import { UserUpdateSchemaValidation } from "../validation/user/UserUpdateSchemaValidation";
+import { PostCreateSchemaValidation } from "../validation/post/PostCreateSchemaValidation";
 
 export class HandleValidation {
     async userRegisterValidation(req: Request, res: Response, next: NextFunction) {
@@ -76,6 +77,30 @@ export class HandleValidation {
                 });
             } else {
                 Logger.info("Dados de atualização validados com sucesso!");
+                return next();
+            }
+        });
+    }
+
+    async postCreateValidation(req: Request, res: Response, next: NextFunction) {
+        const bodyObject = plainToInstance(PostCreateSchemaValidation, req.body);
+
+        await validate(bodyObject).then((err) => {
+            if(err.length > 0) {
+                const messages = err.map((item) => {
+                    return { [item.property]: item.constraints };
+                });
+
+                Logger.error("Dados de criação do post inválidos! --> " + err);
+                console.log(err);
+
+                return res.status(422).json({ 
+                    status: "error",
+                    message: messages,
+                    payload: null 
+                });
+            } else {
+                Logger.info("Dados de criação de post validados com sucesso!");
                 return next();
             }
         });

@@ -5,7 +5,7 @@ import {
     IsNotEmpty
 } from "class-validator";
 
-import { Match } from "./MatchDecorator";
+import { Match } from "../MatchDecorator";
 
 export class UserRegisterSchemaValidation {
 

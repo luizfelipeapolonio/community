@@ -22,7 +22,7 @@ class App {
 
     constructor() {
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));
+        this.app.use(express.urlencoded({ extended: true }));
 
         // Solve CORS
         this.app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
