@@ -5,9 +5,6 @@ import fs from "node:fs";
 
 import { UploadUtils } from "../utils/UploadUtils";
 
-import { ITypedRequestBody } from "../types/SharedTypes";
-import { ICreatePostBody } from "../types/PostTypes";
-
 export class ImageUpload {
     private uploadFolder: string = path.basename(`${__dirname}/uploads`);
 
@@ -42,7 +39,7 @@ export class ImageUpload {
     imageUpload(): Multer {
         return multer({
             storage: this.imageStorage(),
-            fileFilter(req: ITypedRequestBody<ICreatePostBody>, file, cb) {
+            fileFilter(req, file, cb) {
                 const upload = new UploadUtils();
 
                 if(!file.originalname.match(/\.(png|jpg)$/i)) {
@@ -52,10 +49,14 @@ export class ImageUpload {
                     // return cb(new Error("Por favor, envie apenas png ou jpg!"));
                 }
 
-                if(req.baseUrl.includes("posts") && req.method === "POST") {
+                if(req.baseUrl.includes("users") && req.method === "PATCH") {
+                    console.log("\n ==== Teste ====> " + upload.userUpdateUploadValidation(req) + "\n");
+                    return cb(null, upload.userUpdateUploadValidation(req));
+                } else if(req.baseUrl.includes("posts") && req.method === "POST") {
                     console.log("\n ==== Teste ====> " + upload.createPostUploadValidation(req) + "\n");
                     return cb(null, upload.createPostUploadValidation(req));
                 }
+
 
             }
         });

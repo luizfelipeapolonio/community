@@ -16,6 +16,7 @@ export interface IUserUpdateBody {
     name?: string | undefined;
     password?: string | undefined;
     bio?: string | undefined;
+    error?: boolean | undefined;
 }
 
 export type UserMongooseType = Document<unknown, any, IUser> & IUser & { _id:Types.ObjectId };

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import fs from "node:fs";
 
 import Logger from "../config/logger";
 import { UserModel } from "../models/User";
@@ -125,13 +126,21 @@ export class UserController {
 
     // Update user data
     async update(req: ITypedRequestBody<IUserUpdateBody>, res: Response) {
-        const { name, password, bio } = req.body;
+        const { name, password, bio, error } = req.body;
         const utils = new UserUtils();
 
         let profileImage: string | null = null;
 
         if(req.file) {
             profileImage = req.file.filename;
+        }
+
+        if(!req.file && error) {
+            return res.status(422).json({
+                status: "error",
+                message: "Por favor, envie apenas png ou jpg!",
+                payload: null
+            });
         }
 
         // Get the user passed by authGuard middleware
@@ -169,7 +178,21 @@ export class UserController {
             user.bio = bio;
         }
 
+        const currentProfileImage: string | undefined = user.profileImage;
+
         if(profileImage) {
+            if(currentProfileImage) {
+                // Remove the old profile image if it exists
+                fs.unlink(`uploads/users/${currentProfileImage}`, (err) => {
+                    if(err) {
+                        Logger.error(
+                            "Erro ao excluir imagem antiga de perfil --> " + `Erro: ${err}`
+                        );
+                    }
+                    Logger.info(`Imagem antiga de perfil ${currentProfileImage} excluída com sucesso!`);
+                });
+            }
+
             user.profileImage = profileImage;
         }
 

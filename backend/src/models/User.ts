@@ -4,9 +4,9 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
-    profileImage: string;
-    favoritePosts: Types.ObjectId[];
-    bio: string;
+    profileImage?: string;
+    favoritePosts?: Types.ObjectId[];
+    bio?: string;
 }
 
 const UserSchema = new Schema<IUser>(

@@ -26,8 +26,8 @@ export class UserRoutes {
         this.router.patch(
             "/", 
             auth.execute, 
-            validate.userUpdateValidation, 
             image.imageUpload().single("profileImage"), 
+            validate.userUpdateValidation, 
             user.update
         );
         this.router.get("/:id", user.getUserById);
