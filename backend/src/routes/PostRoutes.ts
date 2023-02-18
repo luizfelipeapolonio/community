@@ -29,6 +29,7 @@ export class PostRoutes {
             validate.postCreateValidation, 
             post.createPost
         );
+        this.router.delete("/:id", auth.execute, post.deletePost);
 
         return this.router;
     }

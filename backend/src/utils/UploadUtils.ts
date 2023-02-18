@@ -19,10 +19,10 @@ export class UploadUtils {
     }
 
     createPostUploadValidation(req: ITypedRequestBody<ICreatePostBody>): boolean {
-        const { title, tags } = req.body;
+        const { title, tags, content } = req.body;
         let upload: boolean = true;
 
-        if(!title || !tags) {
+        if(!title || !tags || !content) {
             upload = false;
         }
 

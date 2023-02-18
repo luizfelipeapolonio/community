@@ -12,7 +12,7 @@ import { UserMongooseType } from "../types/UserTypes";
 
 export class PostController {
     async createPost(req: ITypedRequestBody<ICreatePostBody>, res: Response) {
-        const { title, tags, error } = req.body;
+        const { title, content, tags, error } = req.body;
         const image = req.file;
         
         const authUser: UserMongooseType = res.locals.user;
@@ -48,6 +48,7 @@ export class PostController {
                 image: image.filename,
                 title,
                 tags,
+                content,
                 userId: user._id,
                 userName: user.name
             });
@@ -74,6 +75,58 @@ export class PostController {
             return res.status(422).json({
                 status: "error",
                 message: "Erro ao criar post! Tente novamente mais tarde",
+                payload: null
+            });
+        }
+    }
+
+    async deletePost(req: Request, res: Response) {
+        const { id } = req.params;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            // Check if the post belongs to the user
+            if(!post.userId.equals(authUser._id)) {
+                return res.status(406).json({
+                    status: "error",
+                    message: "Ocorreu um erro! Tente novamente mais tarde",
+                    payload: null
+                });
+            }
+
+            const deletedPost = await PostModel.findByIdAndDelete(post._id);
+
+            // Delete the post image from upload directory
+            fs.unlink(`uploads/posts/${post.image}`, (err) => {
+                if(err) {
+                    Logger.error(
+                        "Erro ao excluir imagem do post deletado!" + `Erro: ${err}`
+                    );
+                }
+                Logger.info(`Imagem ${post.image} do post deletado excluída com sucesso!`);
+            });
+
+            return res.status(200).json({
+                status: "success",
+                message: "Post excluído com sucesso!",
+                payload: deletedPost
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao excluir post! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro ao excluir post!",
                 payload: null
             });
         }
