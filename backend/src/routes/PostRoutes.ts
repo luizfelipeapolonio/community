@@ -30,6 +30,8 @@ export class PostRoutes {
             post.createPost
         );
         this.router.delete("/:id", auth.execute, post.deletePost);
+        this.router.get("/", post.getAllPosts);
+        this.router.get("/user/:id", auth.execute, post.getUserPosts);
 
         return this.router;
     }

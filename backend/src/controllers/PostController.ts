@@ -131,4 +131,46 @@ export class PostController {
             });
         }
     }
+
+    async getAllPosts(req: Request, res: Response) {
+        try {
+            const posts = await PostModel.find({}).sort([["createdAt", -1]]).exec();
+
+            return res.status(200).json({
+                status: "success",
+                message: "Posts encontrados",
+                payload: posts
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar todos os posts! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro inesperado! Por favor, volte mais tarde",
+                payload: null
+            });
+        }
+    }
+
+    async getUserPosts(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const posts = await PostModel.find({ userId: id }).sort([["createdAt", -1]]).exec();
+
+            return res.status(200).json({
+                status: "success",
+                message: "Posts do usuário",
+                payload: posts
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar posts do usuário! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
 }
