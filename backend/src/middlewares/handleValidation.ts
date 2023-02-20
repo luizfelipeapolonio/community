@@ -8,6 +8,7 @@ import { UserRegisterSchemaValidation } from "../validation/user/UserRegisterSch
 import { UserLoginSchemaValidation } from "../validation/user/UserLoginSchemaValidation";
 import { UserUpdateSchemaValidation } from "../validation/user/UserUpdateSchemaValidation";
 import { PostCreateSchemaValidation } from "../validation/post/PostCreateSchemaValidation";
+import { PostUpdateSchemaValidation } from "../validation/post/PostUpdateSchemaValidation";
 
 export class HandleValidation {
     async userRegisterValidation(req: Request, res: Response, next: NextFunction) {
@@ -101,6 +102,30 @@ export class HandleValidation {
                 });
             } else {
                 Logger.info("Dados de criação de post validados com sucesso!");
+                return next();
+            }
+        });
+    }
+
+    async postUpdateValidation(req: Request, res: Response, next: NextFunction) {
+        const bodyObject = plainToInstance(PostUpdateSchemaValidation, req.body);
+
+        await validate(bodyObject).then((err) => {
+            if(err.length >0) {
+                const messages = err.map((item) => {
+                    return { [item.property]: item.constraints };
+                });
+
+                Logger.error("Dados de atualização do post inválidos! --> " + err);
+                console.log(err);
+
+                return res.status(422).json({ 
+                    status: "error",
+                    message: messages,
+                    payload: null 
+                });
+            } else {
+                Logger.info("Dados de atualização de post validados com sucesso!");
                 return next();
             }
         });

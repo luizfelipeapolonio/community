@@ -3,15 +3,17 @@ import fs from "node:fs";
 
 import Logger from "../config/logger";
 
+// Models
 import { UserModel } from "../models/User";
 import { PostModel } from "../models/Post";
 
+// Types
 import { ITypedRequestBody } from "../types/SharedTypes";
-import { ICreatePostBody } from "../types/PostTypes";
+import { IPostCreateBody, IPostUpdateBody } from "../types/PostTypes";
 import { UserMongooseType } from "../types/UserTypes";
 
 export class PostController {
-    async createPost(req: ITypedRequestBody<ICreatePostBody>, res: Response) {
+    async createPost(req: ITypedRequestBody<IPostCreateBody>, res: Response) {
         const { title, content, tags, error } = req.body;
         const image = req.file;
         
@@ -169,6 +171,87 @@ export class PostController {
             return res.status(500).json({
                 status: "error",
                 message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
+
+    async getPostById(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Post encontrado",
+                payload: post
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar post! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde!",
+                payload: null
+            });
+        }
+    }
+
+    async updatePost(req: ITypedRequestBody<IPostUpdateBody>, res: Response) {
+        const { id } = req.params;
+        const { content, tags } = req.body;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            // Check if the post belongs to authenticated user
+            if(!post.userId.equals(authUser._id)) {
+                return res.status(406).json({
+                    status: "error",
+                    message: "Ocorreu um erro! Tente novamente mais tarde",
+                    payload: null
+                });
+            }
+
+            if(content) {
+                post.content = content;
+            }
+
+            if(tags) {
+                post.tags = tags;
+            }
+
+            await post.save();
+
+            return res.status(200).json({
+                status: "success",
+                message: "Post atualizado com sucesso!",
+                payload: post
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao atualizar post! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro ao atualizar post!",
                 payload: null
             });
         }

@@ -14,7 +14,7 @@ interface IPost {
     likes: Types.ObjectId[];
     dislike: Types.ObjectId[];
     comments: IComment[];
-    tags: Types.Array<string>;
+    tags: string[];
     userId: Types.ObjectId;
     userName: string;
 }
