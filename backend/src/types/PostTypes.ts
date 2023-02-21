@@ -9,3 +9,7 @@ export interface IPostUpdateBody {
     content?: string | undefined;
     tags?: string[] | undefined;
 }
+
+export interface IPostCommentBody {
+    content: string;
+}

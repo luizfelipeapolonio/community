@@ -9,6 +9,7 @@ import { UserLoginSchemaValidation } from "../validation/user/UserLoginSchemaVal
 import { UserUpdateSchemaValidation } from "../validation/user/UserUpdateSchemaValidation";
 import { PostCreateSchemaValidation } from "../validation/post/PostCreateSchemaValidation";
 import { PostUpdateSchemaValidation } from "../validation/post/PostUpdateSchemaValidation";
+import { PostCommentSchemaValidation } from "../validation/post/PostCommentSchemaValidation";
 
 export class HandleValidation {
     async userRegisterValidation(req: Request, res: Response, next: NextFunction) {
@@ -111,7 +112,7 @@ export class HandleValidation {
         const bodyObject = plainToInstance(PostUpdateSchemaValidation, req.body);
 
         await validate(bodyObject).then((err) => {
-            if(err.length >0) {
+            if(err.length > 0) {
                 const messages = err.map((item) => {
                     return { [item.property]: item.constraints };
                 });
@@ -126,6 +127,30 @@ export class HandleValidation {
                 });
             } else {
                 Logger.info("Dados de atualização de post validados com sucesso!");
+                return next();
+            }
+        });
+    }
+
+    async postCommentValidation(req: Request, res: Response, next: NextFunction) {
+        const bodyObject = plainToInstance(PostCommentSchemaValidation, req.body);
+
+        await validate(bodyObject).then((err) => {
+            if(err.length > 0) {
+                const messages = err.map((item) => {
+                    return { [item.property]: item.constraints };
+                });
+
+                Logger.error("Dados do comentário do post inválidos! --> " + err);
+                console.log(err);
+
+                return res.status(422).json({ 
+                    status: "error",
+                    message: messages,
+                    payload: null 
+                });
+            } else {
+                Logger.info("Dados do comentário do post validados com sucesso!");
                 return next();
             }
         });

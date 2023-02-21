@@ -1,9 +1,9 @@
 import { model, Schema, Types } from "mongoose";
 
-interface IComment {
+export interface IComment {
     userId: Types.ObjectId;
     userName: string;
-    profileImage: string;
+    profileImage?: string | undefined;
     content: string;
 }
 
@@ -25,6 +25,9 @@ const CommentSchema = new Schema<IComment>(
         userName: { type: String },
         profileImage: { type: String },
         content: { type: String }
+    },
+    {
+        timestamps: true
     }
 )
 

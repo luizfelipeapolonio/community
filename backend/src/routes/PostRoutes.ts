@@ -41,6 +41,12 @@ export class PostRoutes {
         );
         this.router.patch("/like/:id", auth.execute, post.likePost);
         this.router.patch("/dislike/:id", auth.execute, post.dislikePost);
+        this.router.patch(
+            "/comment/:id", 
+            auth.execute, 
+            validate.postCommentValidation, 
+            post.insertComment
+        );
 
         return this.router;
     }

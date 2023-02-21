@@ -9,8 +9,9 @@ import { PostModel } from "../models/Post";
 
 // Types
 import { ITypedRequestBody } from "../types/SharedTypes";
-import { IPostCreateBody, IPostUpdateBody } from "../types/PostTypes";
+import { IPostCreateBody, IPostUpdateBody, IPostCommentBody } from "../types/PostTypes";
 import { UserMongooseType } from "../types/UserTypes";
+import { IComment } from "../models/Post";
 
 export class PostController {
     async createPost(req: ITypedRequestBody<IPostCreateBody>, res: Response) {
@@ -406,4 +407,48 @@ export class PostController {
             });
         }
     }
+
+    async insertComment(req: ITypedRequestBody<IPostCommentBody>, res: Response) {
+        const { id } = req.params;
+        const { content } = req.body;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error", 
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            const userComment: IComment = {
+                userId: authUser._id,
+                userName: authUser.name,
+                content,
+                profileImage: authUser.profileImage
+            }
+
+            post.comments.push(userComment);
+
+            await post.save();
+            
+            return res.status(200).json({
+                status: "success",
+                message: "Comentário adicionado com sucesso!",
+                payload: userComment
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao adicionar comentário no post --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
+
 }
