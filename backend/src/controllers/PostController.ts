@@ -222,7 +222,7 @@ export class PostController {
                 });
             }
 
-            // Check if the post belongs to authenticated user
+            // Check if the post belongs to the authenticated user
             if(!post.userId.equals(authUser._id)) {
                 return res.status(406).json({
                     status: "error",
@@ -252,6 +252,156 @@ export class PostController {
             return res.status(500).json({
                 status: "error",
                 message: "Erro ao atualizar post!",
+                payload: null
+            });
+        }
+    }
+
+    async likePost(req: Request, res: Response) {
+        const { id } = req.params;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            const likedPostData = {
+                userId: authUser._id,
+                userName: authUser.name,
+                postId: post._id
+            }
+
+            // Check if user have already disliked the post, if so, remove it and
+            // insert like on the post
+            if(post.dislikes.includes(authUser._id)) {
+                post.dislikes = post.dislikes.filter((id) => {
+                    return !id.equals(authUser._id);
+                });
+                post.likes.push(authUser._id);
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Dislike removido, like adicionado",
+                    payload: likedPostData
+                });
+            }
+
+            // Check if user have already liked the post, if so, remove it
+            if(post.likes.includes(authUser._id)) {
+                post.likes = post.likes.filter((id) => {
+                    return !id.equals(authUser._id);
+                });
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Like removido do post",
+                    payload: likedPostData
+                });
+
+            } else {
+                // If user haven't liked the post yet, insert the like on the post
+                post.likes.push(authUser._id);
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Like adicionado no post",
+                    payload: likedPostData
+                });
+            }
+
+        } catch(error: any) {
+            Logger.error("Erro ao adicionar ou remover like do post! --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
+
+    async dislikePost(req: Request, res: Response) {
+        const { id } = req.params;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            const dislikedPostData = {
+                userId: authUser._id,
+                userName: authUser.name,
+                postId: post._id
+            }
+
+            // Check if user have already liked the post, if so, remove it and
+            // insert dislike on the post
+            if(post.likes.includes(authUser._id)) {
+                post.likes = post.likes.filter((id) => {
+                    return !id.equals(authUser._id);
+                });
+                post.dislikes.push(authUser._id);
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Like removido, dislike adicionado",
+                    payload: dislikedPostData
+                });
+            }
+
+            // Check if user have already disliked the post, if so, remove it
+            if(post.dislikes.includes(authUser._id)) {
+                post.dislikes = post.dislikes.filter((id) => {
+                    return !id.equals(authUser._id);
+                });
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Dislike removido do post",
+                    payload: dislikedPostData
+                });
+
+            } else {
+                // If user haven't disliked the post yet, insert the dislike on the post
+                post.dislikes.push(authUser._id);
+
+                await post.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Dislike adicionado no post",
+                    payload: dislikedPostData
+                });
+            }
+
+        } catch(error: any) {
+            Logger.error("Erro ao adicionar ou remover dislike do post --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
                 payload: null
             });
         }

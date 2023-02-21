@@ -39,6 +39,8 @@ export class PostRoutes {
             validate.postUpdateValidation, 
             post.updatePost
         );
+        this.router.patch("/like/:id", auth.execute, post.likePost);
+        this.router.patch("/dislike/:id", auth.execute, post.dislikePost);
 
         return this.router;
     }

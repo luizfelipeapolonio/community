@@ -12,7 +12,7 @@ interface IPost {
     title: string;
     content: string;
     likes: Types.ObjectId[];
-    dislike: Types.ObjectId[];
+    dislikes: Types.ObjectId[];
     comments: IComment[];
     tags: string[];
     userId: Types.ObjectId;
@@ -34,7 +34,7 @@ const PostSchema = new Schema<IPost>(
         title: { type: String },
         content: { type: String },
         likes: { type: [Schema.Types.ObjectId] },
-        dislike: { type: [Schema.Types.ObjectId] },
+        dislikes: { type: [Schema.Types.ObjectId] },
         comments: { type: [{ type: CommentSchema }] },
         tags: { type: [String] },
         userId: { type: Schema.Types.ObjectId} ,
