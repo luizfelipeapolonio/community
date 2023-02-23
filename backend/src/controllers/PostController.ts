@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import fs from "node:fs";
+import { Types } from "mongoose";
 
 import Logger from "../config/logger";
 
@@ -424,7 +425,7 @@ export class PostController {
                 });
             }
 
-            const userComment: IComment = {
+            const userComment = {
                 userId: authUser._id,
                 userName: authUser.name,
                 content,
@@ -451,4 +452,56 @@ export class PostController {
         }
     }
 
+    async deleteComment(req: Request, res: Response) {
+        const { id, commentId } = req.params;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            const deletedComment = post.comments.filter((comment) => {
+                if(comment.userId.equals(authUser._id)) {
+                    return comment._id.equals(commentId);
+                }
+            });
+
+            if(deletedComment.length === 0) {
+                return res.status(500).json({
+                    status: "error",
+                    message: "Ocorreu um erro! Tente mais tarde",
+                    payload: "CAIU NESSA CONDIÇÃO"
+                });
+            }
+
+            const newCommentsArray = post.comments.filter((comment) => {
+                return !comment._id.equals(commentId);
+            });
+
+            post.comments = newCommentsArray as Types.DocumentArray<IComment>;
+
+            await post.save();
+
+            return res.status(200).json({
+                status: "success", 
+                message: "Comentário excluído com sucesso!",
+                payload: deletedComment
+            });
+           
+        } catch(error: any) {
+            Logger.error("Erro ao excluir comentário do post --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
 }

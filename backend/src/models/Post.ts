@@ -1,6 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 
 export interface IComment {
+    _id: Types.ObjectId;
     userId: Types.ObjectId;
     userName: string;
     profileImage?: string | undefined;
@@ -13,7 +14,7 @@ interface IPost {
     content: string;
     likes: Types.ObjectId[];
     dislikes: Types.ObjectId[];
-    comments: IComment[];
+    comments: Types.DocumentArray<IComment>;
     tags: string[];
     userId: Types.ObjectId;
     userName: string;

@@ -47,6 +47,11 @@ export class PostRoutes {
             validate.postCommentValidation, 
             post.insertComment
         );
+        this.router.patch(
+            "/comment/:id/remove/:commentId", 
+            auth.execute, 
+            post.deleteComment
+        );
 
         return this.router;
     }
