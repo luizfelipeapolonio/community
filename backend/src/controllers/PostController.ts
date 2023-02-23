@@ -10,7 +10,12 @@ import { PostModel } from "../models/Post";
 
 // Types
 import { ITypedRequestBody } from "../types/SharedTypes";
-import { IPostCreateBody, IPostUpdateBody, IPostCommentBody } from "../types/PostTypes";
+import { 
+    IPostCreateBody, 
+    IPostUpdateBody, 
+    IPostCommentBody, 
+    IRequestQuery 
+} from "../types/PostTypes";
 import { UserMongooseType } from "../types/UserTypes";
 import { IComment } from "../models/Post";
 
@@ -500,6 +505,33 @@ export class PostController {
             return res.status(500).json({
                 status: "error",
                 message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
+
+    async searchPost(req: Request<{}, {}, {}, IRequestQuery>, res: Response) {
+        const { q } = req.query;
+
+        try {
+            // Search posts by title or tag field
+            const posts = await PostModel.find({$or: [
+                    {title: new RegExp(q, "i")}, 
+                    {tags: new RegExp(q, "i")}
+                ]
+            }).exec();
+
+            return res.status(200).json({
+                status: "success",
+                message: "Posts encontrados",
+                payload: posts
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar posts --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Erro ao buscar posts! Por favor, tente mais tarde",
                 payload: null
             });
         }

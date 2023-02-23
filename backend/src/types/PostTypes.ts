@@ -13,3 +13,7 @@ export interface IPostUpdateBody {
 export interface IPostCommentBody {
     content: string;
 }
+
+export interface IRequestQuery {
+    q: string;
+}
