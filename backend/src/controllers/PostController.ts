@@ -477,7 +477,7 @@ export class PostController {
                 return res.status(500).json({
                     status: "error",
                     message: "Ocorreu um erro! Tente mais tarde",
-                    payload: "CAIU NESSA CONDIÇÃO"
+                    payload: null
                 });
             }
 
