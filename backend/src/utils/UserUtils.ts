@@ -16,7 +16,7 @@ export class UserUtils {
         }
     
         const token: string = jwt.sign({ id }, jwtSecret, {
-            expiresIn: "7d"
+            expiresIn: "2d"
         });
     
         return token;
