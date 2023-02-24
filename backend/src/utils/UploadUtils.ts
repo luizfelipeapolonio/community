@@ -1,6 +1,6 @@
 import { IUserUpdateBody } from "../types/UserTypes";
 import { ITypedRequestBody } from "../types/SharedTypes";
-import { ICreatePostBody } from "../types/PostTypes";
+import { IPostCreateBody } from "../types/PostTypes";
 
 export class UploadUtils {
     userUpdateUploadValidation(req: ITypedRequestBody<IUserUpdateBody>): boolean {
@@ -18,7 +18,7 @@ export class UploadUtils {
         return upload;
     }
 
-    createPostUploadValidation(req: ITypedRequestBody<ICreatePostBody>): boolean {
+    postCreateUploadValidation(req: ITypedRequestBody<IPostCreateBody>): boolean {
         const { title, tags, content } = req.body;
         let upload: boolean = true;
 

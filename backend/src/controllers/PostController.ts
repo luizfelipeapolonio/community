@@ -536,4 +536,75 @@ export class PostController {
             });
         }
     }
+
+    async favoritePost(req: Request, res: Response) {
+        const { id } = req.params;
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const post = await PostModel.findById(id);
+
+            if(!post) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Post não encontrado!",
+                    payload: null
+                });
+            }
+
+            const user = await UserModel.findById(authUser._id);
+
+            if(!user) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Usuário não encontrado!",
+                    payload: null
+                });
+            }
+
+            const favoritePost = {
+                postId: post._id,
+                title: post.title
+            }
+
+            // Check if user have already added the post to the favorites, 
+            // if so, remove it
+            if(user.favoritePosts.includes(post._id)) {
+                user.favoritePosts = user.favoritePosts.filter((id) => {
+                    return !id.equals(post._id);
+                });
+
+                await user.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Post removido dos favoritos",
+                    payload: favoritePost
+                });
+
+            } else {
+                // If user haven't added the post to favorites yet, 
+                // insert the post to the favorites list
+                user.favoritePosts.push(post._id);
+
+                await user.save();
+
+                return res.status(200).json({
+                    status: "success",
+                    message: "Post adicionado aos favoritos",
+                    payload: favoritePost
+                });
+            }
+
+        } catch(error: any) {
+            Logger.error(
+                "Erro ao adicionar ou remover post dos favoritos --> " + `Erro: ${error}`
+            );
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
 }

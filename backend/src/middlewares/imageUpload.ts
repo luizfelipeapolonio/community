@@ -53,10 +53,9 @@ export class ImageUpload {
                     console.log("\n ==== Teste ====> " + upload.userUpdateUploadValidation(req) + "\n");
                     return cb(null, upload.userUpdateUploadValidation(req));
                 } else if(req.baseUrl.includes("posts") && req.method === "POST") {
-                    console.log("\n ==== Teste ====> " + upload.createPostUploadValidation(req) + "\n");
-                    return cb(null, upload.createPostUploadValidation(req));
+                    console.log("\n ==== Teste ====> " + upload.postCreateUploadValidation(req) + "\n");
+                    return cb(null, upload.postCreateUploadValidation(req));
                 }
-
 
             }
         });

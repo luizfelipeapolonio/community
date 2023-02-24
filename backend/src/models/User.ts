@@ -5,7 +5,7 @@ export interface IUser {
     email: string;
     password: string;
     profileImage?: string;
-    favoritePosts?: Types.ObjectId[];
+    favoritePosts: Types.ObjectId[];
     bio?: string;
 }
 
