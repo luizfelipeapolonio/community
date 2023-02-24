@@ -607,4 +607,39 @@ export class PostController {
             });
         }
     }
+
+    async getFavoritePosts(req: Request, res: Response) {
+        const authUser: UserMongooseType = res.locals.user;
+
+        try {
+            const user = await UserModel.findById(authUser._id);
+
+            if(!user) {
+                return res.status(404).json({
+                    status: "error", 
+                    message: "Usuário não encontrado!"
+                });
+            }
+
+            const favoritePosts = {
+                userId: user._id,
+                userName: user.name,
+                favoritePosts: user.favoritePosts
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Posts favoritos",
+                payload: favoritePosts
+            });
+
+        } catch(error: any) {
+            Logger.error("Erro ao buscar posts favoritos --> " + `Erro: ${error}`);
+            return res.status(500).json({
+                status: "error",
+                message: "Ocorreu um erro! Por favor, tente mais tarde",
+                payload: null
+            });
+        }
+    }
 }

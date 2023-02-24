@@ -33,6 +33,7 @@ export class PostRoutes {
         this.router.get("/", post.getAllPosts);
         this.router.get("/user/:id", auth.execute, post.getUserPosts);
         this.router.patch("/favorites/:id", auth.execute, post.favoritePost);
+        this.router.get("/favorites", auth.execute, post.getFavoritePosts);
         this.router.get("/search", post.searchPost);
         this.router.get("/:id", auth.execute, post.getPostById);
         this.router.patch(
