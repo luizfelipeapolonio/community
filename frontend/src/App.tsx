@@ -1,12 +1,31 @@
 import styles from "./App.module.css";
 
-import { FaUsers } from "react-icons/fa";
+// Components
+import Root from "./components/layout/Root";
+
+// Pages
+import Home from "./pages/Home/Home";
+
+import { 
+  createBrowserRouter, 
+  createRoutesFromElements, 
+  RouterProvider, 
+  Route 
+} from "react-router-dom";
 
 function App() {
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<Root />}>
+        <Route index path="/" element={<Home />} />
+      </Route>
+    )
+  );
+
   return (
     <div className={styles.app}>
-      <h1>Community</h1>
+      <RouterProvider router={router} />
     </div>
   )
 }
