@@ -3,7 +3,7 @@ import styles from "./Navbar.module.css";
 // Icons
 import { FaUsers, FaSearch } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
     return (
@@ -19,8 +19,18 @@ const Navbar = () => {
                 <button><FaSearch /></button>
             </form>
             <div className={styles.options}>
-                <Link to="/login">Entrar</Link>
-                <Link to="/register">Cadastrar</Link>
+                <NavLink 
+                    to="/login" 
+                    className={({ isActive }) => isActive ? styles.active : ""}
+                >
+                    Entrar
+                </NavLink>
+                <NavLink 
+                    to="/register"
+                    className={({ isActive }) => isActive ? styles.active : ""}
+                >
+                    Cadastrar
+                </NavLink>
             </div>
         </nav>
     );

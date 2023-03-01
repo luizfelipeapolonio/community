@@ -38,11 +38,11 @@
     padding: 1rem 3.7rem 1rem 1.2rem;
     font-size: 1.5rem;
     outline: none;
-    transition: 0.4s;
+    transition: 0.3s;
 }
 
 .search input:focus {
-    border: 1px solid #037e51;
+    border: 1px solid #038c5a;
 }
 
 .search input::placeholder {
@@ -75,9 +75,10 @@
 }
 
 .options a {
-    border: 1px solid #037e51;
+    border: 1px solid #038c5a;
     border-radius: 5px;
     padding: 1.1rem;
+    transition: 0.3s;
 }
 
 .options a:first-child {
@@ -85,7 +86,12 @@
 }
 
 .options a:hover {
-    border: 1px solid #037e51;
-    background-color: #037e51;
+    border: 1px solid #038c5a;
+    background-color: #038c5a;
 }
 
+.options .active,
+.options .active:hover {
+    border: 1px solid #025436;
+    background-color: #025436;
+}
