@@ -11,7 +11,7 @@ const Login = () => {
         <div className={styles.form_container}>
             <h1>Entrar</h1>
             <p>
-                Faça o login e compartilhe suas melhores experiências
+                Faça seu login e compartilhe suas melhores experiências
             </p>
             <form>
                 <div className={styles.email}>
@@ -25,7 +25,7 @@ const Login = () => {
                 </div>
                 <input type="submit" value="Entrar" />
             </form>
-            <p>
+            <p className={styles.redirect}>
                 Não tem uma conta? <Link to="/register">Registre-se</Link>
             </p>
         </div>
