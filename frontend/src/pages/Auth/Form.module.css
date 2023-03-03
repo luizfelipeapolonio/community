@@ -33,14 +33,16 @@
 }
 
 .email,
-.password {
+.password,
+.user {
     display: flex;
     align-items: center;
     margin: 1.7rem 0;
     position: relative;
 }
 
-.email input {
+.email input,
+.user input {
     padding: 1.2rem 1rem 1.2rem 3rem;
 }
 
@@ -65,7 +67,8 @@
 }
 
 .email input,
-.password input {
+.password input,
+.user input {
     background-color: #111114;
     color: #e1e1e6;
     border: 1px solid #111114;
@@ -74,25 +77,29 @@
 }
 
 .email input::placeholder,
-.password input::placeholder {
+.password input::placeholder,
+.user input::placeholder {
     color: #9d9d9e;
 }
 
 .email input:focus,
 .password input:focus,
+.user input:focus,
 .password:focus-within input {
     border: 1px solid #038c5a;
     transition: 0.3s ease 0.1s;
 }
 
 .email:focus-within svg,
-.password:focus-within svg {
+.password:focus-within svg,
+.user:focus-within svg {
     color: #038c5a;
     transition: 0.3s ease 0.1s;
 }
 
 .email svg,
-.password svg {
+.password svg,
+.user svg {
     position: absolute;
     left: 7px;
     font-size: 1.6rem;
