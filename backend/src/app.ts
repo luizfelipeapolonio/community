@@ -25,7 +25,7 @@ class App {
         this.app.use(express.urlencoded({ extended: true }));
 
         // Solve CORS
-        this.app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+        this.app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
         // Upload directory
         this.app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
