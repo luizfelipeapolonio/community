@@ -5,7 +5,7 @@ export const extractFormMessages = (array: IApiResponse | null): string[] | unde
     
     if(typeof array.message !== "string") {
         let newArray: string[];
-        let values: string[] = [];
+        let messages: string[] = [];
 
         newArray = array.message.map((item: object) => {
             return Object.values(item)[0];
@@ -13,10 +13,10 @@ export const extractFormMessages = (array: IApiResponse | null): string[] | unde
 
         newArray.map((item) => {
             Object.values(item).forEach((value: string) => {
-                values.push(value);
+                messages.push(value);
             });
         });
 
-        return values;
+        return messages;
     }
 }
