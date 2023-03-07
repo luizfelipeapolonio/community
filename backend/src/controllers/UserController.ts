@@ -102,6 +102,7 @@ export class UserController {
         // Signed in user payload response
         const signedUser = {
             _id: user._id,
+            name: user.name,
             profileImage: user?.profileImage,
             token
         }
