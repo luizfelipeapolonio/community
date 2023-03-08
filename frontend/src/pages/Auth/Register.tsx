@@ -7,8 +7,10 @@ import FlashMessage from "../../components/FlashMessage";
 // Icons
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 
+// Hooks
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import { Link } from "react-router-dom";
 
 // Utils
@@ -24,15 +26,17 @@ const Register = () => {
     const [name, setName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [message, setMessage] = useState<string>("");
 
     const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
     const [isConfirmPassVisible, setIsConfirmPassVisible] = useState<boolean>(false);
 
+    const [message, setMessage] = useState<string>("");
+    const [error, setError] = useState<boolean>(false);
+
     const nameInputRef = useRef<HTMLInputElement>(null!);
 
     const dispatch = useDispatch<AppDispatch>();
-    const { loading, error, payload, success } = useSelector((state: RootState) => state.auth);
+    const { loading, error: errorState, payload, success } = useSelector((state: RootState) => state.auth);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -46,11 +50,6 @@ const Register = () => {
 
         await dispatch(register(user));
     }
-
-    // Reset all auth states
-    useEffect(() => {
-        dispatch(reset());
-    }, [dispatch]);
 
     // Clean all inputs after user is successfully created
     useEffect(() => {
@@ -80,16 +79,26 @@ const Register = () => {
                     console.log("TESTANDO", extractedMessages);
                 }
             }
+            
+            if(errorState) {
+                setError(true);
+            } else {
+                setError(false);
+            }
+
+            dispatch(reset());
         }
-    }, [payload]);
+    }, [payload, errorState]);
 
     // Reset form messages
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setMessage("");
-        }, 3000);
-
-        return () => clearTimeout(timer);
+        if(message) {
+            const timer = setTimeout(() => {
+                setMessage("");
+            }, 3000);
+    
+            return () => clearTimeout(timer);
+        }
     }, [message]);
 
     return (
