@@ -1,18 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Types
-import { IUserRegisterBody } from "../types/authService.types";
+import { IUserRegisterBody, IUserLoginBody } from "../types/authService.types";
 import { IAuthInitialState, IAuthenticatedUser } from "../types/authSlice.types";
 import { IApiResponse } from "../types/shared.types";
 
 // Services
 import authService from "../services/authService";
 
-// Get user from the Local Storage
+// Get user from Local Storage
 const user: string | null = localStorage.getItem("user");
 const parsedUser: IAuthenticatedUser | null = user ? JSON.parse(user) : null;
 
 const initialState: IAuthInitialState = {
+    user: parsedUser,
     payload: null,
     error: false,
     success: false,
@@ -30,6 +31,25 @@ export const register = createAsyncThunk(
         }
 
         return data ? data : null;
+    }
+);
+
+export const login = createAsyncThunk(
+    "auth/login",
+    async (user: IUserLoginBody, thunkAPI) => {
+        const data = await authService.login(user);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data ? data : null
+    }
+);
+
+export const logout = createAsyncThunk(
+    "auth/logout", () => {
+        authService.logout();
     }
 );
 
@@ -56,16 +76,51 @@ export const authSlice = createSlice({
             state.success = true;
             state.error = false;
             state.payload = action.payload;
-
-            console.log("FULFILLED PAYLOAD: ", state.payload);
         })
         .addCase(register.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
             state.payload = action.payload as IApiResponse;
+        })
+        .addCase(login.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+            state.payload = null;
+        })
+        .addCase(login.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
 
-            console.log("REJECTED PAYLOAD: ", state.payload);
+            console.log("LOGIN FULFILLED PAYLOAD: ", state.payload);
+        })
+        .addCase(login.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+
+            console.log("LOGIN REJECTED PAYLOAD: ", state.payload);
+        })
+        .addCase(logout.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+
+            console.log("LOGOUT PENDING USER: ", state.user);
+            console.log("LOGOUT PENDING LOADING: ", state.loading);
+        })
+        .addCase(logout.fulfilled, (state) => {
+            state.user = null;
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+
+            console.log("LOGOUT FULFILLED USER: ", state.user);
+            console.log("LOGOUT FULFILLED LOADING: ", state.loading);
         })
     }
 });

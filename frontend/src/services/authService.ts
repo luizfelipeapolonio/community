@@ -24,16 +24,20 @@ const register = async (data: IUserRegisterBody): Promise<IApiResponse | null> =
     }
 }
 
-const login = async (data: IUserLoginBody): Promise<void | null> => {
-    const config = requestConfig<IUserLoginBody>("GET", data, null, false);
+const login = async (data: IUserLoginBody) => {
+    const config = requestConfig<IUserLoginBody>("POST", data, null, false);
 
     try {
-        const response = await fetch(api + "/users/login" + config);
+        const response = await fetch(api + "/users/login", config as RequestInit);
         const data: IApiResponse = await response.json();
 
         if(data.status === "success") {
             localStorage.setItem("user", JSON.stringify(data.payload));
         }
+
+        console.log(data);
+
+        return data;
 
     } catch(error) {
         console.log(error);
@@ -41,9 +45,14 @@ const login = async (data: IUserLoginBody): Promise<void | null> => {
     }
 }
 
+const logout = () => {
+    localStorage.removeItem("user");
+}
+
 const authService = {
     register,
-    login
+    login,
+    logout
 }
 
 export default authService;
