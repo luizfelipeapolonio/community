@@ -2,6 +2,7 @@ import { IApiResponse } from "./shared.types";
 
 export interface IAuthenticatedUser {
     _id: string;
+    name: string;
     profileImage: string | undefined;
     token: string;
 }
