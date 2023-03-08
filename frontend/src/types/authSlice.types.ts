@@ -7,6 +7,7 @@ export interface IAuthenticatedUser {
 }
 
 export interface IAuthInitialState {
+    user: IAuthenticatedUser | null;
     payload: IApiResponse | null;
     error: boolean;
     success: boolean;
