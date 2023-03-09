@@ -2,18 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Types
 import { IUserRegisterBody, IUserLoginBody } from "../types/authService.types";
-import { IAuthInitialState, IAuthenticatedUser } from "../types/authSlice.types";
+import { IAuthInitialState } from "../types/authSlice.types";
 import { IApiResponse } from "../types/shared.types";
+
+// Utils
+import { getUserFromLocalStorage } from "../utils/getUserFromLocalStorage";
 
 // Services
 import authService from "../services/authService";
 
-// Get user from Local Storage
-const user: string | null = localStorage.getItem("user");
-const parsedUser: IAuthenticatedUser | null = user ? JSON.parse(user) : null;
-
 const initialState: IAuthInitialState = {
-    user: parsedUser,
+    user: getUserFromLocalStorage(),
     payload: null,
     error: false,
     success: false,
@@ -88,12 +87,15 @@ export const authSlice = createSlice({
             state.success = false;
             state.error = false;
             state.payload = null;
+
+            console.log("LOGIN PENDING USER: ", state.user);
         })
         .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
             state.success = true;
             state.error = false;
             state.payload = action.payload;
+            state.user = getUserFromLocalStorage();
 
             console.log("LOGIN FULFILLED PAYLOAD: ", state.payload);
         })
