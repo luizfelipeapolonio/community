@@ -7,6 +7,7 @@ import { BsFillFilePostFill } from "react-icons/bs";
 import { Link, NavLink } from "react-router-dom";
 
 // Hooks
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -16,12 +17,19 @@ import { AppDispatch } from "../../config/store";
 import { reset, logout } from "../../slices/authSlice";
 
 const Navbar = () => {
+    const [toggleMenu, setToggleMenu] = useState<string>("");
+
     const { auth } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
     const handleLogout = async () => {
         await dispatch(logout());
         dispatch(reset());
+        setToggleMenu("");
+    }
+
+    const toggleDropdownMenu = () => {
+        setToggleMenu((isOpen) => isOpen ? "" : "open");
     }
 
     return (
@@ -48,15 +56,13 @@ const Navbar = () => {
                         <NavLink to="#">
                             Criar Post
                         </NavLink>
-                        <div className={styles.auth_user}>
-                            <div>
+                        <div className={styles.auth_user} onClick={toggleDropdownMenu}>
+                            <div className={toggleMenu ? styles.is_open : "" }>
                                 <FaUser />
                             </div>
-                            {/* <span>Felipe</span> */}
-                            {/* <button onClick={handleLogout}>Sair</button> */}
                         </div>
                     </div>
-                    <div className={styles.drop_menu}>
+                    <div className={`${styles.drop_menu} ${styles[toggleMenu]}`}>
                         <div className={styles.user}>
                             <img src="/profileImage.jpg" alt="Image de perfil" />
                             <span>Felipe</span>
@@ -93,7 +99,6 @@ const Navbar = () => {
                         >
                             Cadastrar
                         </NavLink>
-                        {/* {auth ? <button onClick={handleLogout}>Sair</button> : null} */}
                     </div>
                 )
             }
