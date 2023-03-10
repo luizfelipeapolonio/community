@@ -157,10 +157,14 @@
 }
 
 .drop_menu .edit_profile div svg {
-    font-size: 2.1rem;
+    font-size: 2rem;
 }
 
 .drop_menu .my_posts div svg {
+    font-size: 1.8rem;
+}
+
+.drop_menu .about div svg {
     font-size: 1.8rem;
 }
 
@@ -176,15 +180,18 @@
 .drop_menu .edit_profile,
 .drop_menu .my_posts,
 .drop_menu .favorite_posts,
+.drop_menu .about,
 .drop_menu .signout {
     display: flex;
     align-items: center;
     gap: 1rem;
+    color: #c2c2c3;
 }
 
 .drop_menu .edit_profile,
 .drop_menu .my_posts,
 .drop_menu .favorite_posts,
+.drop_menu .about,
 .drop_menu .signout {
     border-radius: 8px;
 }
@@ -192,12 +199,13 @@
 .drop_menu .edit_profile div,
 .drop_menu .my_posts div,
 .drop_menu .favorite_posts div,
+.drop_menu .about div,
 .drop_menu .signout div {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -205,6 +213,7 @@
 .drop_menu .edit_profile:hover,
 .drop_menu .my_posts:hover,
 .drop_menu .favorite_posts:hover,
+.drop_menu .about:hover,
 .drop_menu .signout:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -212,6 +221,7 @@
 .drop_menu .edit_profile:hover div,
 .drop_menu .my_posts:hover div,
 .drop_menu .favorite_posts:hover div,
+.drop_menu .about:hover div,
 .drop_menu .signout:hover div {
     background: transparent;
 }
@@ -219,9 +229,18 @@
 .drop_menu .edit_profile:hover div svg,
 .drop_menu .my_posts:hover div svg,
 .drop_menu .favorite_posts:hover div svg,
+.drop_menu .about:hover div svg,
 .drop_menu .signout:hover div svg {
     transition: 0.2s;
     color: #00b37e;
+}
+
+.drop_menu .edit_profile:hover span,
+.drop_menu .my_posts:hover span,
+.drop_menu .favorite_posts:hover span,
+.drop_menu .about:hover span,
+.drop_menu .signout:hover span {
+    color: #e1e1e6;
 }
 
 .signup {

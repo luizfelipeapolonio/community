@@ -1,7 +1,15 @@
 import styles from "./Navbar.module.css";
 
 // Icons
-import { FaUsers, FaUser, FaUserCog, FaSignOutAlt, FaSearch, FaBookmark } from "react-icons/fa";
+import { 
+    FaUsers, 
+    FaUser, 
+    FaUserCog, 
+    FaSignOutAlt, 
+    FaSearch, 
+    FaBookmark, 
+    FaInfoCircle 
+} from "react-icons/fa";
 import { BsFillFilePostFill } from "react-icons/bs";
 
 import { Link, NavLink } from "react-router-dom";
@@ -78,6 +86,10 @@ const Navbar = () => {
                         <Link to="#" className={styles.favorite_posts}>
                             <div><FaBookmark /></div>
                             <span>Posts Favoritos</span>
+                        </Link>
+                        <Link to="#" className={styles.about}>
+                            <div><FaInfoCircle /></div>
+                            <span>Sobre o Community</span>
                         </Link>
                         <div className={styles.signout} onClick={handleLogout}>
                             <div><FaSignOutAlt /></div>
