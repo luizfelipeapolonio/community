@@ -27,7 +27,7 @@ import { reset, logout } from "../../slices/authSlice";
 const Navbar = () => {
     const [toggleMenu, setToggleMenu] = useState<string>("");
 
-    const { auth } = useAuth();
+    const { auth, loading } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
     const handleLogout = async () => {
@@ -52,7 +52,7 @@ const Navbar = () => {
                 <input type="text" placeholder="Busque pelo título ou tag" />
                 <button><FaSearch /></button>
             </form>
-            {auth ? (
+            {auth && !loading ? (
                 <>
                     <div className={styles.auth_container}>
                         <NavLink 
@@ -89,7 +89,7 @@ const Navbar = () => {
                         </Link>
                         <Link to="#" className={styles.about}>
                             <div><FaInfoCircle /></div>
-                            <span>Sobre o Community</span>
+                            <span>Sobre</span>
                         </Link>
                         <div className={styles.signout} onClick={handleLogout}>
                             <div><FaSignOutAlt /></div>

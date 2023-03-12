@@ -12,17 +12,22 @@ import {
   createBrowserRouter, 
   createRoutesFromElements, 
   RouterProvider, 
-  Route 
+  Route,
+  Navigate
 } from "react-router-dom";
 
+// Hooks
+import { useAuth } from "./hooks/useAuth";
+
 function App() {
+  const { auth } = useAuth();
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
         <Route index path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
+        <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
       </Route>
     )
   );
