@@ -100,8 +100,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
@@ -113,6 +113,14 @@
 
 .auth_user div svg {
     font-size: 1.8rem
+}
+
+.auth_user div img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .is_open {
@@ -154,6 +162,17 @@
 .drop_menu .user span {
     font-size: 1.8rem;
     font-weight: 600;
+}
+
+.drop_menu .user div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 2rem;
 }
 
 .drop_menu .edit_profile div svg {

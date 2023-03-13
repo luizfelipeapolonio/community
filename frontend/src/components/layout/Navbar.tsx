@@ -15,20 +15,40 @@ import { BsFillFilePostFill } from "react-icons/bs";
 import { Link, NavLink } from "react-router-dom";
 
 // Hooks
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../hooks/useAuth";
 
-// Reducer types
-import { AppDispatch } from "../../config/store";
+// Types
+import { AppDispatch, RootState } from "../../config/store";
+import { IUser } from "../../types/userService.types";
 
+import { uploads } from "../../config/requestConfig";
+
+// Reducers
 import { reset, logout } from "../../slices/authSlice";
+import { getUserProfile } from "../../slices/userSlice";
 
 const Navbar = () => {
+    const [user, setUser] = useState<IUser | null>(null);
     const [toggleMenu, setToggleMenu] = useState<string>("");
 
     const { auth, loading } = useAuth();
+    const { payload, loading: userLoading } = useSelector((state: RootState) => state.user);
+
     const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(getUserProfile());
+    }, []);
+
+    useEffect(() => {
+        if(payload) {
+            if(payload.status === "success") {
+                setUser(payload.payload as IUser);
+            }
+        }
+    }, [payload]);
 
     const handleLogout = async () => {
         await dispatch(logout());
@@ -66,14 +86,22 @@ const Navbar = () => {
                         </NavLink>
                         <div className={styles.auth_user} onClick={toggleDropdownMenu}>
                             <div className={toggleMenu ? styles.is_open : "" }>
-                                <FaUser />
+                                {user && user.profileImage ? (
+                                    <img src={`${uploads}/users/${user.profileImage}`} alt="Imagem de Perfil" />
+                                ) : <FaUser />} 
                             </div>
                         </div>
                     </div>
                     <div className={`${styles.drop_menu} ${styles[toggleMenu]}`}>
                         <div className={styles.user}>
-                            <img src="/profileImage.jpg" alt="Image de perfil" />
-                            <span>Felipe</span>
+                            {user && (
+                                <>
+                                    {user.profileImage ? (
+                                        <img src={`${uploads}/users/${user.profileImage}`} alt="Imagem de Perfil" />
+                                    ) : <div><FaUser /></div>}
+                                    <span>{user.name}</span>
+                                </>
+                            )}
                         </div>
                         <Link to="#" className={styles.edit_profile}>
                             <div><FaUserCog /></div>
