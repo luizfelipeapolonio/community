@@ -28,7 +28,7 @@ class App {
         this.app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
         // Upload directory
-        this.app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+        this.app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
         this.app.use(morganMiddleware);
 
