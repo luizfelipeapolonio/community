@@ -3,8 +3,8 @@ import styles from "./Navbar.module.css";
 // Icons
 import { 
     FaUsers, 
-    FaUser, 
-    FaUserCog, 
+    FaUser,
+    FaUserCircle, 
     FaSignOutAlt, 
     FaSearch, 
     FaBookmark, 
@@ -93,28 +93,32 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className={`${styles.drop_menu} ${styles[toggleMenu]}`}>
-                        <div className={styles.user}>
-                            {user && (
+                        {user && (
+                            <>
+                            <div className={styles.user}>
                                 <>
                                     {user.profileImage ? (
                                         <img src={`${uploads}/users/${user.profileImage}`} alt="Imagem de Perfil" />
                                     ) : <div><FaUser /></div>}
                                     <span>{user.name}</span>
+                                    <p>{user.email}</p>
                                 </>
-                            )}
-                        </div>
-                        <Link to="#" className={styles.edit_profile}>
-                            <div><FaUserCog /></div>
-                            <span>Editar Perfil</span>
-                        </Link>
-                        <Link to="#" className={styles.my_posts}>
-                            <div><BsFillFilePostFill /></div>
-                            <span>Meus Posts</span>
-                        </Link>
-                        <Link to="#" className={styles.favorite_posts}>
-                            <div><FaBookmark /></div>
-                            <span>Posts Favoritos</span>
-                        </Link>
+                            
+                            </div>
+                            <Link to={`/users/${user._id}`} className={styles.edit_profile}>
+                                <div><FaUserCircle /></div>
+                                <span>Meu Perfil</span>
+                            </Link>
+                            {/* <Link to="#" className={styles.my_posts}>
+                                <div><BsFillFilePostFill /></div>
+                                <span>Meus Posts</span>
+                            </Link> */}
+                            <Link to="#" className={styles.favorite_posts}>
+                                <div><FaBookmark /></div>
+                                <span>Posts Favoritos</span>
+                            </Link>
+                            </>
+                        )}
                         <Link to="#" className={styles.about}>
                             <div><FaInfoCircle /></div>
                             <span>Sobre</span>

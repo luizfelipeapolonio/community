@@ -147,8 +147,13 @@
 }
 
 .drop_menu .user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding-bottom: 1.2rem;
     border-bottom: 1px solid #545456;
+    color: #c2c2c3;
 }
 
 .drop_menu .user img {
@@ -157,11 +162,7 @@
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
-}
-
-.drop_menu .user span {
-    font-size: 1.8rem;
-    font-weight: 600;
+    margin-bottom: 1rem;
 }
 
 .drop_menu .user div {
@@ -175,12 +176,19 @@
     font-size: 2rem;
 }
 
-.drop_menu .edit_profile div svg {
-    font-size: 2rem;
+.drop_menu .user span {
+    font-size: 1.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #00b37e;
 }
 
-.drop_menu .my_posts div svg {
-    font-size: 1.8rem;
+.drop_menu .user p {
+    font-size: 1.5rem;
+}
+
+.drop_menu .edit_profile div svg {
+    font-size: 2rem;
 }
 
 .drop_menu .about div svg {
@@ -195,9 +203,7 @@
     cursor: pointer;
 }
 
-.drop_menu .user,
 .drop_menu .edit_profile,
-.drop_menu .my_posts,
 .drop_menu .favorite_posts,
 .drop_menu .about,
 .drop_menu .signout {
@@ -208,7 +214,6 @@
 }
 
 .drop_menu .edit_profile,
-.drop_menu .my_posts,
 .drop_menu .favorite_posts,
 .drop_menu .about,
 .drop_menu .signout {
@@ -216,7 +221,6 @@
 }
 
 .drop_menu .edit_profile div,
-.drop_menu .my_posts div,
 .drop_menu .favorite_posts div,
 .drop_menu .about div,
 .drop_menu .signout div {
@@ -230,7 +234,6 @@
 }
 
 .drop_menu .edit_profile:hover,
-.drop_menu .my_posts:hover,
 .drop_menu .favorite_posts:hover,
 .drop_menu .about:hover,
 .drop_menu .signout:hover {
@@ -238,7 +241,6 @@
 }
 
 .drop_menu .edit_profile:hover div,
-.drop_menu .my_posts:hover div,
 .drop_menu .favorite_posts:hover div,
 .drop_menu .about:hover div,
 .drop_menu .signout:hover div {
@@ -246,7 +248,6 @@
 }
 
 .drop_menu .edit_profile:hover div svg,
-.drop_menu .my_posts:hover div svg,
 .drop_menu .favorite_posts:hover div svg,
 .drop_menu .about:hover div svg,
 .drop_menu .signout:hover div svg {
@@ -255,7 +256,6 @@
 }
 
 .drop_menu .edit_profile:hover span,
-.drop_menu .my_posts:hover span,
 .drop_menu .favorite_posts:hover span,
 .drop_menu .about:hover span,
 .drop_menu .signout:hover span {
