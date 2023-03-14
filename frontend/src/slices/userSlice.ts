@@ -24,7 +24,11 @@ export const getUserProfile = createAsyncThunk<IApiResponse | null, void, {state
 
         const data = await userService.profile(token);
 
-        return data;
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data ? data : null;
     }
 );
 
@@ -50,6 +54,12 @@ export const userSlice = createSlice({
             state.success = true;
             state.error = false;
             state.payload = action.payload;
+        })
+        .addCase(getUserProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
         })
     }
 })

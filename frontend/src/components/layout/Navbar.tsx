@@ -34,13 +34,9 @@ const Navbar = () => {
     const [toggleMenu, setToggleMenu] = useState<string>("");
 
     const { auth, loading } = useAuth();
-    const { payload, loading: userLoading } = useSelector((state: RootState) => state.user);
+    const { payload, error } = useSelector((state: RootState) => state.user);
 
     const dispatch = useDispatch<AppDispatch>();
-
-    useEffect(() => {
-        dispatch(getUserProfile());
-    }, []);
 
     useEffect(() => {
         if(payload) {
@@ -48,7 +44,16 @@ const Navbar = () => {
                 setUser(payload.payload as IUser);
             }
         }
-    }, [payload]);
+
+        if(error) {
+            dispatch(logout());
+        }
+
+        if(auth) {
+            dispatch(getUserProfile());
+        }
+
+    }, [payload, error, auth]);
 
     const handleLogout = async () => {
         await dispatch(logout());
