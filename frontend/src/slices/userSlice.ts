@@ -15,7 +15,7 @@ const initialState: IUserInitialState = {
     payload: null
 }
 
-export const getUserProfile = createAsyncThunk<IApiResponse | null, void, {state: RootState}>(
+export const getCurrentUser = createAsyncThunk<IApiResponse | null, void, {state: RootState}>(
     "user/profile",
     async (_, thunkAPI) => {
         const token: string | undefined = thunkAPI.getState().auth.user?.token;
@@ -28,15 +28,28 @@ export const getUserProfile = createAsyncThunk<IApiResponse | null, void, {state
             return thunkAPI.rejectWithValue(data);
         }
 
-        return data ? data : null;
+        return data;
     }
 );
+
+export const getUserById = createAsyncThunk(
+    "user/getById",
+    async (id: string, thunkAPI) => {
+        const data = await userService.getUserById(id);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+)
 
 export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        reset: (state) => {
+        resetUserStates: (state) => {
             state.loading = false;
             state.success = false;
             state.error = false;
@@ -44,18 +57,35 @@ export const userSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(getUserProfile.pending, (state) => {
+        builder.addCase(getCurrentUser.pending, (state) => {
             state.loading = true;
             state.success = false;
             state.error = false;
         })
-        .addCase(getUserProfile.fulfilled, (state, action) => {
+        .addCase(getCurrentUser.fulfilled, (state, action) => {
             state.loading = false;
             state.success = true;
             state.error = false;
             state.payload = action.payload;
         })
-        .addCase(getUserProfile.rejected, (state, action) => {
+        .addCase(getCurrentUser.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(getUserById.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(getUserById.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(getUserById.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
@@ -64,5 +94,5 @@ export const userSlice = createSlice({
     }
 })
 
-export const { reset } = userSlice.actions;
+export const { resetUserStates } = userSlice.actions;
 export default userSlice.reducer;

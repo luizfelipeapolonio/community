@@ -10,7 +10,6 @@ import {
     FaBookmark, 
     FaInfoCircle 
 } from "react-icons/fa";
-import { BsFillFilePostFill } from "react-icons/bs";
 
 import { Link, NavLink } from "react-router-dom";
 
@@ -21,39 +20,57 @@ import { useAuth } from "../../hooks/useAuth";
 
 // Types
 import { AppDispatch, RootState } from "../../config/store";
-import { IUser } from "../../types/userService.types";
+import { IUser } from "../../types/shared.types";
 
 import { uploads } from "../../config/requestConfig";
 
 // Reducers
 import { reset, logout } from "../../slices/authSlice";
-import { getUserProfile } from "../../slices/userSlice";
+import { resetUserStates, getCurrentUser } from "../../slices/userSlice";
 
 const Navbar = () => {
     const [user, setUser] = useState<IUser | null>(null);
+    const [error, setError] = useState<boolean>(false);
     const [toggleMenu, setToggleMenu] = useState<string>("");
 
     const { auth, loading } = useAuth();
-    const { payload, error } = useSelector((state: RootState) => state.user);
+    const { payload, error: userError } = useSelector((state: RootState) => state.user);
+    const { success } = useSelector((state: RootState) => state.auth);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(getCurrentUser());
+    }, [])
 
     useEffect(() => {
         if(payload) {
             if(payload.status === "success") {
                 setUser(payload.payload as IUser);
             }
+
+            if(userError && payload.statusCode) {
+                if(payload.statusCode === 401) {
+                    setError(true);
+                }
+            }
         }
 
+        // Get current user data when sign in
+        if(success) {
+            dispatch(getCurrentUser());
+        }
+
+        dispatch(reset());
+        dispatch(resetUserStates());
+    }, [payload, userError, success]);
+
+    useEffect(() => {
         if(error) {
             dispatch(logout());
         }
-
-        if(auth) {
-            dispatch(getUserProfile());
-        }
-
-    }, [payload, error, auth]);
+        dispatch(reset());
+    }, [error]);
 
     const handleLogout = async () => {
         await dispatch(logout());

@@ -9,6 +9,23 @@ const profile = async (token: string): Promise<IApiResponse | null> => {
     try {
         const response = await fetch(api + "/users/profile", config);
         const data: IApiResponse = await response.json();
+        
+        data.statusCode = response.status;
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const getUserById = async (id: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("GET", null, null, false);
+
+    try {
+        const response = await fetch(api + `/users/${id}`, config);
+        const data: IApiResponse = await response.json();
 
         return data;
 
@@ -19,7 +36,8 @@ const profile = async (token: string): Promise<IApiResponse | null> => {
 }
 
 const userService = {
-    profile
+    profile,
+    getUserById
 }
 
 export default userService;
