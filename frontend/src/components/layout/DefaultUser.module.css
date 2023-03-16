@@ -1,0 +1,14 @@
+.default_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #a8a8b3;
+}
+
+.default_container svg {
+    font-size: 3.5rem;
+}
