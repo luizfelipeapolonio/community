@@ -26,7 +26,7 @@ import { uploads } from "../../config/requestConfig";
 
 // Reducers
 import { reset, logout } from "../../slices/authSlice";
-import { resetUserStates, getCurrentUser } from "../../slices/userSlice";
+import { getCurrentUser } from "../../slices/userSlice";
 
 const Navbar = () => {
     const [user, setUser] = useState<IUser | null>(null);
@@ -41,12 +41,14 @@ const Navbar = () => {
 
     useEffect(() => {
         dispatch(getCurrentUser());
-    }, [])
+    }, []);
 
     useEffect(() => {
         if(payload) {
-            if(payload.status === "success") {
-                setUser(payload.payload as IUser);
+            if(payload.status === "success" && typeof payload.message === "string") {
+                if(payload.message.includes("logado")) {
+                    setUser(payload.payload as IUser);
+                }
             }
 
             if(userError && payload.statusCode) {
@@ -62,7 +64,7 @@ const Navbar = () => {
         }
 
         dispatch(reset());
-        dispatch(resetUserStates());
+        // dispatch(resetUserStates());
     }, [payload, userError, success]);
 
     useEffect(() => {
@@ -131,10 +133,6 @@ const Navbar = () => {
                                 <div><FaUserCircle /></div>
                                 <span>Meu Perfil</span>
                             </Link>
-                            {/* <Link to="#" className={styles.my_posts}>
-                                <div><BsFillFilePostFill /></div>
-                                <span>Meus Posts</span>
-                            </Link> */}
                             <Link to="#" className={styles.favorite_posts}>
                                 <div><FaBookmark /></div>
                                 <span>Posts Favoritos</span>
