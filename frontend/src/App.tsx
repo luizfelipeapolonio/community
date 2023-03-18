@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 import { 
   createBrowserRouter, 
@@ -27,6 +28,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
         <Route index path="/" element={<Home />} />
+        <Route path="/users/" element={auth ? <EditProfile /> : <Navigate to="/" />} />
         <Route path="/users/:id" element={<Profile />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />

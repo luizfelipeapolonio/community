@@ -1,0 +1,126 @@
+.edit_container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    font-size: 1.7rem;
+    z-index: 0;
+}
+
+.edit_container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.edit_container img {
+    margin: 0 auto;
+}
+
+.edit_container form label {
+    color: #c4c4c4;
+    font-weight: 500;
+}
+
+.edit_container form input {
+    background-color: rgb(30, 30, 34);
+    color: #e1e1e6;
+    border: 1px solid rgb(30, 30, 34);
+    border-radius: 5px;
+    font-size: 1.6rem;
+    width: 100%;
+}
+
+.edit_container form input[type="submit"] {
+    background-color: #026843;
+    color: #e1e1e6;
+    font-size: 1.7rem;
+    font-weight: 500;
+    padding: 1.2rem 0;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.edit_container form input[type="submit"]:hover {
+    background-color: #038c5a;
+}
+
+.edit_container form input[type="submit"]:disabled {
+    background-color: #013824;
+    color: #a8a8b3;
+    cursor: not-allowed;
+}
+
+.edit_user,
+.edit_email,
+.edit_image,
+.edit_bio,
+.edit_pass {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0 1.6rem 0;
+    position: relative;
+}
+
+.edit_user input,
+.edit_email input,
+.edit_image input,
+.edit_bio input {
+    padding: 1.2rem 1rem 1.2rem 3rem;
+}
+
+.edit_user input::placeholder,
+.edit_bio input::placeholder,
+.edit_pass input::placeholder {
+    color: #9d9d9e;
+}
+
+.edit_user input:focus,
+.edit_bio input:focus,
+.edit_pass input:focus,
+.edit_pass:focus-within input {
+    border: 1px solid #038c5a;
+    transition: 0.3s ease 0.1s;
+}
+
+.edit_user:focus-within svg,
+.edit_bio:focus-within svg,
+.edit_pass:focus-within svg {
+    color: #038c5a;
+    transition: 0.3s ease 0.1s;
+}
+
+.edit_email input:read-only {
+    color: #9d9d9e;
+    cursor: not-allowed;
+}
+
+.edit_pass input {
+    padding: 1.2rem 3rem;
+}
+
+.edit_pass button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 7px;
+}
+
+.edit_pass button svg {
+    position: initial;
+    color: #545456;
+    font-size: 1.8rem;
+}
+
+.edit_user svg,
+.edit_email svg,
+.edit_image svg,
+.edit_bio svg,
+.edit_pass svg {
+    position: absolute;
+    left: 7px;
+    font-size: 1.6rem;
+    color: #545456;
+}
