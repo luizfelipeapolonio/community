@@ -3,6 +3,7 @@ import styles from "./EditProfile.module.css";
 
 // Components
 import Image from "../../components/Image";
+import DefaultUser from "../../components/layout/DefaultUser";
 
 // Icons
 import { 
@@ -12,7 +13,8 @@ import {
     FaEye, 
     FaEyeSlash, 
     FaAlignLeft,
-    FaFileImage
+    FaFileImage,
+    FaTimes
 } from "react-icons/fa";
 
 // Types
@@ -22,7 +24,7 @@ import { IUser } from "../../types/shared.types";
 import { uploads } from "../../config/requestConfig";
 
 // Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Reducers
@@ -33,12 +35,15 @@ const EditProfile = () => {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [image, setImage] = useState<string>("");
+    const [imagePreview, setImagePreview] = useState<string>("");
     const [bio, setBio] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
 
     const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
     const [isConfirmPassVisible, setIsConfimPassVisible] = useState<boolean>(false);
+
+    const imageInputRef = useRef<HTMLInputElement>(null!);
 
     const dispatch = useDispatch<AppDispatch>();
     const { payload } = useSelector((state: RootState) => state.user);
@@ -63,10 +68,29 @@ const EditProfile = () => {
 
     // console.log("EDIT PROFILE: ", user);
 
+    const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const image: File | null = e.target.files ? e.target.files[0] : null;
+        
+        if(image) {
+            const blobURL: string = URL.createObjectURL(image);
+            setImagePreview(blobURL);
+        }
+    }
+
+    const clearImage = () => {
+        setImagePreview("");
+        imageInputRef.current.value = "";
+    }
+
     return (
         <div className={styles.edit_container}>
             <h2>Editar Perfil</h2>
-            {image && <Image src={`${uploads}/users/${image}`} alt={name} />}
+            {(image || imagePreview) ? (
+                <Image 
+                    src={imagePreview ? imagePreview : `${uploads}/users/${image}`}
+                    alt={name} 
+                />
+            ) : <DefaultUser position="center" />}
             <form>
                 <label htmlFor="name">Nome</label>
                 <div className={styles.edit_user}>
@@ -93,7 +117,13 @@ const EditProfile = () => {
                 <label htmlFor="image">Imagem de perfil</label>
                 <div className={styles.edit_image}>
                     <FaFileImage />
-                    <input type="file" name="image" />
+                    <input type="file" name="image" ref={imageInputRef} onChange={handleFile} />
+                    <button 
+                        type="button"
+                        onClick={clearImage}
+                    >
+                        <FaTimes />
+                    </button>
                 </div>
                 <label htmlFor="bio">Bio</label>
                     <div className={styles.edit_bio}>

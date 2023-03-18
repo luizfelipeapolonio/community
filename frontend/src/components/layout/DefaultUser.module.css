@@ -12,3 +12,7 @@
 .default_container svg {
     font-size: 3.5rem;
 }
+
+.center {
+    margin: 0 auto;
+}

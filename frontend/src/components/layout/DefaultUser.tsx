@@ -3,9 +3,13 @@ import styles from "./DefaultUser.module.css";
 
 import { FaUser } from "react-icons/fa";
 
-const DefaultUser = () => {
+interface Props {
+    position?: "center";
+}
+
+const DefaultUser = ({ position }: Props) => {
     return (
-        <div className={styles.default_container}>
+        <div className={`${styles.default_container} ${position ? styles[position] : null}`}>
             <FaUser />
         </div>
     );

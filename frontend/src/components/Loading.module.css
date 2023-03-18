@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     background: transparent;
-    z-index: 10;
+    z-index: 100;
 }
 
 .loading_container img {

@@ -11,7 +11,8 @@
     margin-bottom: 2rem;
 }
 
-.edit_container img {
+.edit_container img,
+.edit_container div:nth-child(1) {
     margin: 0 auto;
 }
 
@@ -63,7 +64,6 @@
 
 .edit_user input,
 .edit_email input,
-.edit_image input,
 .edit_bio input {
     padding: 1.2rem 1rem 1.2rem 3rem;
 }
@@ -94,10 +94,23 @@
     cursor: not-allowed;
 }
 
+.edit_image input,
 .edit_pass input {
     padding: 1.2rem 3rem;
 }
 
+.edit_image button svg {
+    position: initial;
+    color: #545456;
+    font-size: 1.9rem;
+}
+
+.edit_image button svg:hover {
+    color: #f2385a;
+    transition: 0.2s ease;
+}
+
+.edit_image button,
 .edit_pass button {
     display: flex;
     justify-content: center;
