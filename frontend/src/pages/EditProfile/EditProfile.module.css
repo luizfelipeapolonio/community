@@ -17,8 +17,14 @@
 }
 
 .edit_container form label {
+    display: inline-block;
     color: #c4c4c4;
     font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.edit_container form label:nth-child(1) {
+    margin-top: 1.6rem;
 }
 
 .edit_container form input {
@@ -58,7 +64,8 @@
 .edit_pass {
     display: flex;
     align-items: center;
-    margin: 0.5rem 0 1.6rem 0;
+    /* margin: 0.5rem 0 1.6rem 0; */
+    margin-bottom: 1.6rem;
     position: relative;
 }
 
