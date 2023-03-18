@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Types
 import { IUserInitialState } from "../types/userSlice.types";
+import { IUpdateBody } from "../types/userService.types";
 import { IApiResponse } from "../types/shared.types";
 import { RootState } from "../config/store";
 
@@ -41,6 +42,23 @@ export const getUserById = createAsyncThunk(
             return thunkAPI.rejectWithValue(data);
         }
 
+        return data;
+    }
+);
+
+export const updateProfile = createAsyncThunk<IApiResponse| null, IUpdateBody, {state: RootState}>(
+    "user/update",
+    async (body: IUpdateBody, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await userService.updateProfile(body, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+        
         return data;
     }
 )
@@ -86,6 +104,23 @@ export const userSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(getUserById.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(updateProfile.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(updateProfile.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(updateProfile.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
