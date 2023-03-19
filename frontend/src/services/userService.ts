@@ -36,8 +36,8 @@ const getUserById = async (id: string): Promise<IApiResponse | null> => {
     }
 }
 
-const updateProfile = async (data: IUpdateBody, token: string): Promise<IApiResponse | null> => {
-    const config = requestConfig<IUpdateBody>("PATCH", data, token, true);
+const updateProfile = async (body: IUpdateBody, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig<IUpdateBody>("PATCH", body, token, true);
 
     try {
         const response = await fetch(api + "/users/", config as RequestInit);
