@@ -28,9 +28,7 @@ export const requestConfig = <T extends object | null>(
             body: data,
             headers: {}
         };
-    }
-
-    if(data === null) {
+    } else if(data === null) {
         config = {
             method,
             headers: {}
