@@ -77,11 +77,15 @@ const Navbar = () => {
     const handleLogout = async () => {
         await dispatch(logout());
         dispatch(reset());
-        setToggleMenu("");
+        closeDropdownMenu();
     }
 
     const toggleDropdownMenu = () => {
         setToggleMenu((isOpen) => isOpen ? "" : "open");
+    }
+
+    const closeDropdownMenu = () => {
+        setToggleMenu("");
     }
 
     return (
@@ -129,17 +133,17 @@ const Navbar = () => {
                                 </>
                             
                             </div>
-                            <Link to={`/users/${user._id}`} className={styles.edit_profile}>
+                            <Link to={`/users/${user._id}`} className={styles.edit_profile} onClick={closeDropdownMenu}>
                                 <div><FaUserCircle /></div>
                                 <span>Meu Perfil</span>
                             </Link>
-                            <Link to="#" className={styles.favorite_posts}>
+                            <Link to="#" className={styles.favorite_posts} onClick={closeDropdownMenu}>
                                 <div><FaBookmark /></div>
                                 <span>Posts Favoritos</span>
                             </Link>
                             </>
                         )}
-                        <Link to="#" className={styles.about}>
+                        <Link to="#" className={styles.about} onClick={closeDropdownMenu}>
                             <div><FaInfoCircle /></div>
                             <span>Sobre</span>
                         </Link>
