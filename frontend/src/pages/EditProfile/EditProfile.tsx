@@ -148,6 +148,14 @@ const EditProfile = () => {
 
     const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
         const image: File | null = e.target.files ? e.target.files[0] : null;
+
+        if(image && !image.name.match(/\.(png|jpg)$/i)) {
+            setError(true);
+            setMessage("Por favor, envie apenas imagens png ou jpg!");
+            clearImage();            
+            return;
+        }
+
         setImagePreview(image);
     }
 
