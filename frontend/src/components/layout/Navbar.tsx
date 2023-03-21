@@ -49,6 +49,10 @@ const Navbar = () => {
                 if(payload.message.includes("logado")) {
                     setUser(payload.payload as IUser);
                 }
+
+                if(payload.message.includes("atualizado")) {
+                    dispatch(getCurrentUser());
+                }
             }
 
             if(userError && payload.statusCode) {
@@ -64,7 +68,6 @@ const Navbar = () => {
         }
 
         dispatch(reset());
-        // dispatch(resetUserStates());
     }, [payload, userError, success]);
 
     useEffect(() => {
