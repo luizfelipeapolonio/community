@@ -28,6 +28,8 @@ const getUserById = async (id: string): Promise<IApiResponse | null> => {
         const response = await fetch(api + `/users/${id}`, config);
         const data: IApiResponse = await response.json();
 
+        data.statusCode = response.status;
+
         return data;
 
     } catch(error) {
