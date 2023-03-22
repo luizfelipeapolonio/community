@@ -5,13 +5,14 @@ import styles from "./Profile.module.css";
 import Loading from "../../components/Loading";
 import DefaultUser from "../../components/layout/DefaultUser";
 import Image from "../../components/Image";
+import PostCard from "../../components/PostCard";
 
 // Icons
 import { FaUserEdit, FaExclamationTriangle } from "react-icons/fa";
 
 // Types
 import { RootState, AppDispatch } from "../../config/store";
-import { IUser } from "../../types/shared.types";
+import { IUser, IPost } from "../../types/shared.types";
 import { IAuthenticatedUser } from "../../types/authSlice.types";
 
 import { Link } from "react-router-dom";
@@ -26,17 +27,21 @@ import { uploads } from "../../config/requestConfig";
 
 // Reducers
 import { getUserById } from "../../slices/userSlice";
+import { getUserPosts } from "../../slices/postSlice";
 
 const Profile = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [authUser, setAuthUser] = useState<IAuthenticatedUser | null>(null);
     const [notFound, setNotFound] = useState<boolean>(false);
+    const [posts, setPosts] = useState<IPost[]>([]);
 
     const { id } = useParams();
     const dispatch = useDispatch<AppDispatch>();
 
     const { user: authenticatedUser } = useSelector((state: RootState) => state.auth);
     const { payload, loading } = useSelector((state: RootState) => state.user);
+    const { payload: userPosts, loading: postsLoading } = useSelector((state: RootState) => state.post);
+    
     const { auth, loading: authLoading } = useAuth();
 
     const isAuthUser: boolean = user?._id === authUser?._id && auth;
@@ -44,6 +49,7 @@ const Profile = () => {
     useEffect(() => {
         if(!id) return;
         dispatch(getUserById(id));
+        dispatch(getUserPosts(id));
     }, [id]);
 
     useEffect(() => {
@@ -52,6 +58,7 @@ const Profile = () => {
         }
     }, [auth]);
 
+    // Set user states
     useEffect(() => {
         if(payload) {
             if(payload.status === "success" && typeof payload.message === "string") {
@@ -68,6 +75,17 @@ const Profile = () => {
             }
         }
     }, [payload]);
+
+    // Set post state
+    useEffect(() => {
+        if(userPosts) {
+            if(userPosts.status === "success") {
+                setPosts(userPosts.payload as IPost[]);
+            }
+        }
+    }, [userPosts]);
+
+    console.log("POSTS: ", posts);
 
     return (
         <div className={styles.profile_container}>
@@ -92,7 +110,7 @@ const Profile = () => {
                             </div>
                         </div>
                     )}
-                     {notFound && (
+                    {notFound && (
                         <div className={styles.notfound}>
                             <FaExclamationTriangle />
                             <h1>Oops</h1>
