@@ -16,3 +16,19 @@ export interface IUser {
     bio?: string;
     profileImage?: string;
 }
+
+export interface IPost {
+    _id: string;
+    image: string;
+    title: string;
+    content: string;
+    likes: string[];
+    dislikes: string[];
+    tags: string[];
+    userId: string;
+    userName: string;
+    comments: string[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
