@@ -5,7 +5,6 @@ import styles from "./Profile.module.css";
 import Loading from "../../components/Loading";
 import DefaultUser from "../../components/layout/DefaultUser";
 import Image from "../../components/Image";
-import PostCard from "../../components/PostCard";
 
 // Icons
 import { FaUserEdit, FaExclamationTriangle } from "react-icons/fa";
@@ -70,6 +69,7 @@ const Profile = () => {
 
             if(payload.status === "error" && payload.statusCode) {
                 if(payload.statusCode === 404) {
+                    setUser(null);
                     setNotFound(true);
                 }
             }
@@ -89,7 +89,7 @@ const Profile = () => {
 
     return (
         <div className={styles.profile_container}>
-            {loading ? <Loading /> : (
+            {(loading || postsLoading) ? <Loading /> : (
                 <>
                     {user && !notFound && (
                         <div className={styles.user_info}>
@@ -108,6 +108,10 @@ const Profile = () => {
                                 <span>{user.name}</span>
                                 {user.bio && <p>{user.bio}</p>}
                             </div>
+                            <div>
+                                <span>{posts.length}</span>
+                                {posts.length === 1 ? <p>Post</p> : <p>Posts</p>}
+                            </div>
                         </div>
                     )}
                     {notFound && (
@@ -117,10 +121,23 @@ const Profile = () => {
                             <p>Usuário não encontrado!</p>
                         </div>
                     )}
+                    <div className={styles.posts_grid}>
+                        {user && posts.length > 0 && (
+                            posts.map((post) => (
+                                <div className={styles.postcard} key={post._id}>
+                                    <Link to="#">{post.title}</Link>
+                                    <img 
+                                        src={`${uploads}/posts/${post.image}`}
+                                        alt={post.title}
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ))
+                        )}
+                    </div>
+                    {user && posts.length === 0 && <p className={styles.noposts}>Ainda não há posts</p>}
                 </>
             )}
-            <Link to="/users/63f6628a51e72cba9b722c7d">clica</Link>
-            <Link to="/users/asdfasdfsadfsafdfas">Not found</Link>
         </div>
     );
 }
