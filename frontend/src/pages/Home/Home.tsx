@@ -72,17 +72,24 @@ const Home = () => {
                         </div>
                         <div className={styles.social}>
                                 <div className={styles.like_dislike}>
-                                    <button type="button">
-                                        <BsHandThumbsUp /> 
-                                        {post.likes.length}
-                                    </button>
-                                    <button type="button">
-                                        <BsHandThumbsDown />
-                                        {post.dislikes.length}
-                                    </button>
+                                    <div className={styles.like}>
+                                        <button type="button">
+                                            <BsHandThumbsUp /> 
+                                        </button>
+                                        <span>{post.likes.length}</span>
+                                    </div>
+                                    <div className={styles.dislike}>
+                                        <button type="button">
+                                            <BsHandThumbsDown />
+                                        </button>
+                                        <span>{post.dislikes.length}</span>
+                                    </div>
                                 </div>
                                 <div className={styles.comments}>
-                                    <span><BsChatRightText /> {post.comments.length}</span>
+                                    <button type="button">
+                                        <BsChatRightText />
+                                    </button>
+                                    <span>{post.comments.length}</span>
                                 </div>
                         </div>
                     </div>

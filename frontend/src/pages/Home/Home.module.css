@@ -102,14 +102,27 @@
     margin-right: 0.4rem;
 }
 
-.social .like_dislike {
+.social .like_dislike,
+.social .like_dislike .like,
+.social .like_dislike .dislike,
+.social .comments {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.social .like_dislike .like,
+.social .like_dislike .dislike,
+.social .comments {
+    gap: 0.3rem;
+}
+
+.social .like_dislike {
     gap: 1.2rem;
 }
 
-.social .like_dislike button {
+.social .like_dislike button,
+.social .comments button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,20 +136,15 @@
     font-size: 2.3rem;
 }
 
-.social .like_dislike button:nth-child(1) svg {
+.social .like_dislike .like button svg {
     color: #8cc84b;
 }
 
-.social .like_dislike button:nth-child(2) svg {
+.social .like_dislike .dislike button svg {
     color: #da3251;
 }
 
 .social .comments svg {
     color: #4cbad3;
     font-size: 2rem;
-}
-
-.social .comments span {
-    display: flex;
-    align-items: center;
 }
