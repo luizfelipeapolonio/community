@@ -70,11 +70,11 @@
 .post_content .content {
     display: -webkit-box;
     overflow: hidden;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     line-height: 2.5rem;
-    max-height: 5rem;
+    max-height: 12.5rem;
     white-space: pre-wrap;
     width: 50%;
     margin-top: 1rem;

@@ -3,6 +3,7 @@ import styles from "./Home.module.css";
 
 // Components
 import Image from "../../components/Image";
+import Loading from "../../components/Loading";
 
 // Icons
 import { 
@@ -50,7 +51,8 @@ const Home = () => {
 
     return (
         <div className={styles.home_container}>
-            {posts.length > 0 && (
+            {posts.length === 0 && loading && <Loading />}
+            {posts.length > 0 && !loading && (
                 posts.map((post) => (
                     <div className={styles.home_postcard} key={post._id}>
                         <Link to="#" className={styles.title}>{post.title}</Link>
