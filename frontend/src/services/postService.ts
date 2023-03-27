@@ -17,8 +17,25 @@ const getUserPosts = async (id: string, token: string): Promise<IApiResponse | n
         return null;
     }
 }
+
+const getAllPosts = async (): Promise<IApiResponse | null> => {
+    const config = requestConfig("GET", null, null, false);
+
+    try {
+        const response = await fetch(api + "/posts/", config);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
-    getUserPosts
+    getUserPosts,
+    getAllPosts
 }
 
 export default postService;
