@@ -1,0 +1,142 @@
+.home_container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    min-height: 400px;
+    gap: 1.5rem;
+    font-size: 1.7rem;
+}
+
+.home_postcard {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 200px;
+    background-color: rgb(30, 30, 34);
+    border: 1px solid #545456;
+    border-radius: 10px;
+    padding: 1.3rem 2.5rem;
+    text-align: center;
+}
+
+.home_postcard .title {
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: #00b37e;
+}
+
+.home_postcard .title:hover {
+    transition: 0.3s;
+    color: #03d193;
+}
+
+.home_postcard p {
+    color: #9d9d9e;
+    font-size: 1.6rem;
+    margin: 0.5rem 0 1.4rem;
+}
+
+.home_postcard p a {
+    color: #4faf8c;
+}
+
+.home_postcard p a:hover {
+    text-decoration: underline;
+}
+
+.home_postcard .post_tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.3rem;
+}
+
+.home_postcard .post_tags span {
+    /* background-color: #54782d; */
+    background-color: rgba(4, 211, 97, 0.6);
+    border-radius: 20px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding: 0.3rem 0.6rem;
+}
+
+.post_content {
+    display: flex;
+    gap: 1rem;
+    text-align: left;
+    margin-bottom: 1.3rem;
+}
+
+.post_content .content {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    line-height: 2.5rem;
+    max-height: 5rem;
+    white-space: pre-wrap;
+    width: 50%;
+    margin-top: 1rem;
+}
+
+.post_content .post_image {
+    width: 50%;
+}
+
+.post_content .post_image img {
+    width: 100%;
+    height: 15rem;
+    border-radius: 5px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.social {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social svg {
+    margin-right: 0.4rem;
+}
+
+.social .like_dislike {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
+.social .like_dislike button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 1.7rem;
+    color: #e1e1e6;
+}
+
+.social .like_dislike button svg {
+    font-size: 2.3rem;
+}
+
+.social .like_dislike button:nth-child(1) svg {
+    color: #8cc84b;
+}
+
+.social .like_dislike button:nth-child(2) svg {
+    color: #da3251;
+}
+
+.social .comments svg {
+    color: #4cbad3;
+    font-size: 2rem;
+}
+
+.social .comments span {
+    display: flex;
+    align-items: center;
+}
