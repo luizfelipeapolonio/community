@@ -2,7 +2,7 @@
 import styles from "./Home.module.css";
 
 // Components
-import ProfileImage from "../../components/ProfileImage";
+import Image from "../../components/Image";
 
 // Icons
 import { 
@@ -31,7 +31,7 @@ import { getAllPosts } from "../../slices/postSlice";
 const Home = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
 
-    const { payload: allPosts } = useSelector((state: RootState) => state.post);
+    const { payload: allPosts, loading } = useSelector((state: RootState) => state.post);
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
@@ -67,7 +67,15 @@ const Home = () => {
                                 {post.content}
                             </div>
                             <div className={styles.post_image}>
-                                <img src={`${uploads}/posts/${post.image}`} alt={post.title} />
+                                <Image 
+                                    src={`${uploads}/posts/${post.image}`} 
+                                    alt={post.title}
+                                    width="100%"
+                                    height="15rem"
+                                    placeholderWidth="100%"
+                                    placeholderHeight="15rem"
+                                    borderRadius="5px"
+                                />
                             </div>
                         </div>
                         <div className={styles.social}>

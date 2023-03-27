@@ -2,7 +2,7 @@
 import styles from "./EditProfile.module.css";
 
 // Components
-import Image from "../../components/ProfileImage";
+import Image from "../../components/Image";
 import DefaultUser from "../../components/layout/DefaultUser";
 import Loading from "../../components/Loading";
 import FlashMessage from "../../components/FlashMessage";

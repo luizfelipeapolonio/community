@@ -84,14 +84,6 @@
     width: 50%;
 }
 
-.post_content .post_image img {
-    width: 100%;
-    height: 15rem;
-    border-radius: 5px;
-    object-fit: cover;
-    object-position: center;
-}
-
 .social {
     display: flex;
     justify-content: space-between;
