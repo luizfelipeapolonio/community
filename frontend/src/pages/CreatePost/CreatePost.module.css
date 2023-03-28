@@ -1,0 +1,151 @@
+.createpost_container,
+.createpost_container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.createpost_container {
+    width: 40%;
+    font-size: 1.7rem;
+    text-align: center;
+}
+
+.createpost_container > p {
+    font-style: italic;
+    margin: 1.2rem 0 2.3rem;
+    color: #c2c2c3;
+}
+
+.createpost_container form {
+    text-align: left;
+}
+
+.createpost_container form label {
+    display: inline-block;
+    color: #c4c4c4;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.createpost_container form img {
+    width: 300px;
+    height: 150px;
+    border-radius: 5px;
+    object-fit: cover;
+    object-position: center;
+    margin: 1rem auto 2rem;
+}
+
+.createpost_container form input,
+.createpost_container form textarea {
+    background-color: rgb(30, 30, 34);
+    color: #e1e1e6;
+    border: 1px solid rgb(30, 30, 34);
+    border-radius: 5px;
+    font-size: 1.6rem;
+    width: 100%;
+}
+
+.createpost_container .title,
+.createpost_container .tags,
+.createpost_container .content,
+.createpost_container .image {
+    margin-bottom: 1.6rem;
+}
+
+.createpost_container .title,
+.createpost_container .tags,
+.createpost_container .image {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.createpost_container .title input,
+.createpost_container .tags input {
+    padding: 1.2rem 1rem 1.2rem 3rem;
+}
+
+.createpost_container .image input {
+    padding: 1.2rem 3rem;
+}
+
+.createpost_container .content textarea {
+    resize: none;
+    outline: none;
+    padding: 1.5rem;
+}
+
+.createpost_container .title input::placeholder,
+.createpost_container .tags input::placeholder,
+.createpost_container .content textarea::placeholder {
+    color: #9d9d9e;
+}
+
+.createpost_container .title input:focus,
+.createpost_container .tags input:focus,
+.createpost_container .content textarea:focus {
+    border: 1px solid #038c5a;
+    transition: 0.3s ease 0.1s;
+}
+
+.createpost_container .title svg,
+.createpost_container .tags svg,
+.createpost_container .image svg {
+    position: absolute;
+    left: 7px;
+    font-size: 1.6rem;
+    color: #545456;
+}
+
+.createpost_container .title svg {
+    font-size: 2rem;
+}
+
+.createpost_container .title:focus-within svg,
+.createpost_container .tags:focus-within svg {
+    color: #038c5a;
+    transition: 0.3s ease 0.1s;
+}
+
+.createpost_container .image button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 7px;
+}
+
+.createpost_container .image button svg {
+    position: initial;
+    color: #545456;
+    font-size: 1.8rem;
+}
+
+.createpost_container .image button svg:hover {
+    color: #f2385a;
+    transition: 0.2s ease;
+}
+
+.createpost_container input[type="submit"] {
+    background-color: #026843;
+    color: #e1e1e6;
+    font-size: 1.7rem;
+    font-weight: 500;
+    padding: 1.2rem 0;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.createpost_container input[type="submit"]:hover {
+    background-color: #038c5a;
+}
+
+.createpost_container input[type="submit"]:disabled {
+    background-color: #013824;
+    color: #a8a8b3;
+    cursor: not-allowed;
+}

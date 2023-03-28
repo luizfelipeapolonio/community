@@ -112,7 +112,7 @@ const Navbar = () => {
                         >
                             Home
                         </NavLink>
-                        <NavLink to="#">
+                        <NavLink to="/post">
                             Criar Post
                         </NavLink>
                         <div className={styles.auth_user} onClick={toggleDropdownMenu}>
