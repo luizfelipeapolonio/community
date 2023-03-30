@@ -112,7 +112,10 @@ const Navbar = () => {
                         >
                             Home
                         </NavLink>
-                        <NavLink to="/post">
+                        <NavLink 
+                            to="/post"
+                            className={({ isActive }) => isActive ? styles.active : ""}
+                        >
                             Criar Post
                         </NavLink>
                         <div className={styles.auth_user} onClick={toggleDropdownMenu}>
