@@ -27,7 +27,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Reducers
-import { getAllPosts } from "../../slices/postSlice";
+import { resetPostStates, getAllPosts } from "../../slices/postSlice";
 
 const Home = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
@@ -45,6 +45,8 @@ const Home = () => {
                 setPosts(allPosts.payload as IPost[]);
             }
         }
+
+        dispatch(resetPostStates());
     }, [allPosts]);
 
     console.log("ALL POSTS: ", posts);
