@@ -31,7 +31,7 @@ function App() {
         <Route index path="/" element={<Home />} />
         <Route path="/post" element={auth ? <CreatePost /> : <Navigate to="/login" />} />
         <Route path="/users/" element={auth ? <EditProfile /> : <Navigate to="/" />} />
-        <Route path="/users/:id" element={<Profile />} />
+        <Route path="/users/:id" element={auth ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
       </Route>
