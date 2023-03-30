@@ -6,3 +6,10 @@ export interface IPostInitialState {
     error: boolean;
     payload: IApiResponse | null;
 }
+
+export interface IPostCreateBody {
+    title: string;
+    tags: string[];
+    content: string;
+    image: File | null;
+}

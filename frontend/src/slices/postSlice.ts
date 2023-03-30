@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IPostInitialState } from "../types/postSlice.types";
+import { IPostInitialState, IPostCreateBody } from "../types/postSlice.types";
 import { RootState } from "../config/store";
 
 // Service
@@ -43,7 +43,24 @@ export const getAllPosts = createAsyncThunk<IApiResponse | null, void, {state: R
 
         return data;
     }
-)
+);
+
+export const createPost = createAsyncThunk<IApiResponse | null, IPostCreateBody, {state: RootState}>(
+    "post/create",
+    async (body: IPostCreateBody, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+        
+        const data = await postService.createPost(body, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
 
 const postSlice = createSlice({
     name: "post",
@@ -86,6 +103,23 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(getAllPosts.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(createPost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(createPost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(createPost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
