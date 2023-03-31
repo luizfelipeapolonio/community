@@ -126,7 +126,8 @@
     width: 100%;
 }
 
-.postcard .post_actions button {
+.postcard .post_actions button,
+.postcard .post_actions a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,22 +143,20 @@
 
 .postcard .post_actions button:hover {
     background-color: rgba(255, 255, 255, 0.1);
-}
-
-.postcard .post_actions button:nth-child(1):hover {
     color: #faafbd;
 }
 
-.postcard .post_actions button:nth-child(2):hover {
-    color: #74d7ed;
-}
-
-.postcard .post_actions button:nth-child(1) svg {
+.postcard .post_actions button svg {
     color: #da3251;
     font-size: 1.9rem;
 }
 
-.postcard .post_actions button:nth-child(2) svg {
+.postcard .post_actions a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #74d7ed;
+}
+
+.postcard .post_actions a svg {
     color: #1fb5d7;
     font-size: 2rem;
 }

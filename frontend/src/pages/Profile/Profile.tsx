@@ -138,10 +138,10 @@ const Profile = () => {
                                                 <FaTrashAlt />
                                                 Excluir
                                             </button>
-                                            <button type="button">
+                                            <Link to={`/post/${post._id}/edit`}>
                                                 <FaEdit />
                                                 Editar
-                                            </button>
+                                            </Link>
                                         </div>
                                     )}
                                 </div>
