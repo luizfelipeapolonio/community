@@ -7,7 +7,7 @@ import DefaultUser from "../../components/layout/DefaultUser";
 import Image from "../../components/Image";
 
 // Icons
-import { FaUserEdit, FaExclamationTriangle } from "react-icons/fa";
+import { FaUserEdit, FaExclamationTriangle, FaTrashAlt, FaEdit } from "react-icons/fa";
 
 // Types
 import { RootState, AppDispatch } from "../../config/store";
@@ -26,7 +26,7 @@ import { uploads } from "../../config/requestConfig";
 
 // Reducers
 import { getUserById } from "../../slices/userSlice";
-import { getUserPosts } from "../../slices/postSlice";
+import { resetPostStates, getUserPosts } from "../../slices/postSlice";
 
 const Profile = () => {
     const [user, setUser] = useState<IUser | null>(null);
@@ -54,6 +54,8 @@ const Profile = () => {
     useEffect(() => {
         if(auth) {
             setAuthUser(authenticatedUser);
+        } else {
+            setAuthUser(null);
         }
     }, [auth]);
 
@@ -81,11 +83,10 @@ const Profile = () => {
         if(userPosts) {
             if(userPosts.status === "success") {
                 setPosts(userPosts.payload as IPost[]);
+                dispatch(resetPostStates());
             }
         }
     }, [userPosts]);
-
-    console.log("POSTS: ", posts);
 
     return (
         <div className={styles.profile_container}>
@@ -131,6 +132,18 @@ const Profile = () => {
                                         alt={post.title}
                                         loading="lazy"
                                     />
+                                    {isAuthUser && !authLoading && (
+                                        <div className={styles.post_actions}>
+                                            <button type="button">
+                                                <FaTrashAlt />
+                                                Excluir
+                                            </button>
+                                            <button type="button">
+                                                <FaEdit />
+                                                Editar
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ))
                         )}
