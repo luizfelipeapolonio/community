@@ -115,6 +115,7 @@ const Navbar = () => {
                         <NavLink 
                             to="/post"
                             className={({ isActive }) => isActive ? styles.active : ""}
+                            end
                         >
                             Criar Post
                         </NavLink>
