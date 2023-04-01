@@ -9,7 +9,8 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile/Profile";
 import EditProfile from "./pages/EditProfile/EditProfile";
-import CreatePost from "./pages/CreatePost/CreatePost";
+import CreatePost from "./pages/Post/CreatePost";
+import EditPost from "./pages/Post/EditPost";
 
 import { 
   createBrowserRouter, 
@@ -30,6 +31,7 @@ function App() {
       <Route path="/" element={<Root />}>
         <Route index path="/" element={<Home />} />
         <Route path="/post" element={auth ? <CreatePost /> : <Navigate to="/login" />} />
+        <Route path="/post/:id/edit" element={auth ? <EditPost /> : <Navigate to="/login" />} />
         <Route path="/users/" element={auth ? <EditProfile /> : <Navigate to="/" />} />
         <Route path="/users/:id" element={auth ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
