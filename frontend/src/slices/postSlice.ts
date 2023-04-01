@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IPostInitialState, IPostCreateBody } from "../types/postSlice.types";
+import { IPostInitialState, IPostCreateBody, IPostEditBody } from "../types/postSlice.types";
 import { RootState } from "../config/store";
 
 // Service
@@ -70,6 +70,23 @@ export const getPostById = createAsyncThunk<IApiResponse | null, string, {state:
         if(!token) return null;
 
         const data = await postService.getPostById(id, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
+export const updatePost = createAsyncThunk<IApiResponse | null, {id: string, body: IPostEditBody}, {state: RootState}>(
+    "post/update",
+    async ({ id, body }, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.updatePost(id, body, token);
 
         if(data && data.status === "error") {
             return thunkAPI.rejectWithValue(data);
@@ -154,6 +171,23 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(getPostById.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(updatePost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(updatePost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(updatePost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

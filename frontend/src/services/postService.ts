@@ -2,7 +2,7 @@ import { api, requestConfig } from "../config/requestConfig";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IPostCreateBody } from "../types/postSlice.types";
+import { IPostCreateBody, IPostEditBody } from "../types/postSlice.types";
 
 const getUserPosts = async (id: string, token: string): Promise<IApiResponse | null> => {
     const config = requestConfig("GET", null, token, false);
@@ -66,11 +66,27 @@ const getPostById = async (id: string, token: string): Promise<IApiResponse | nu
     }
 }
 
+const updatePost = async (id: string, body: IPostEditBody, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig<IPostEditBody>("PATCH", body, token, false);
+
+    try {
+        const response = await fetch(api + `/posts/${id}`, config as RequestInit);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
     createPost,
-    getPostById
+    getPostById,
+    updatePost
 }
 
 export default postService;

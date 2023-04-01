@@ -13,3 +13,8 @@ export interface IPostCreateBody {
     content: string;
     image: File | null;
 }
+
+export interface IPostEditBody {
+    tags?: string[];
+    content?: string;
+}
