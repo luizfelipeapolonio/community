@@ -170,7 +170,7 @@ const CreatePost = () => {
                 <div className={styles.content}>
                     <textarea 
                         id="content"
-                        rows={10} 
+                        rows={13} 
                         value={content}
                         placeholder="O que você gostaria de compartilhar?"
                         onChange={(e) => setContent(e.target.value)} 

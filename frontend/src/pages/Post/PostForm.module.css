@@ -16,7 +16,7 @@
     color: #c2c2c3;
 }
 
-.postform_container .image {
+.postform_container .postedImage {
     margin: 0.5rem auto 1.2rem;
 }
 
@@ -68,6 +68,11 @@
 .postform_container .title input,
 .postform_container .tags input {
     padding: 1.2rem 1rem 1.2rem 3rem;
+}
+
+.postform_container .title input:disabled {
+    color: #9d9d9e;
+    cursor: not-allowed;
 }
 
 .postform_container .image input {
