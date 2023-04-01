@@ -62,6 +62,23 @@ export const createPost = createAsyncThunk<IApiResponse | null, IPostCreateBody,
     }
 );
 
+export const getPostById = createAsyncThunk<IApiResponse | null, string, {state: RootState}>(
+    "post/getById",
+    async (id: string, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.getPostById(id, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
 const postSlice = createSlice({
     name: "post",
     initialState,
@@ -120,6 +137,23 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(createPost.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(getPostById.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(getPostById.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(getPostById.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
