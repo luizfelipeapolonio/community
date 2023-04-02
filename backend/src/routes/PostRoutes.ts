@@ -29,7 +29,7 @@ export class PostRoutes {
             validate.postCreateValidation, 
             post.createPost
         );
-        this.router.delete("/:id", auth.execute, post.deletePost);
+        this.router.delete("/", auth.execute, post.deletePost);
         this.router.get("/", post.getAllPosts);
         this.router.get("/user/:id", auth.execute, post.getUserPosts);
         this.router.patch("/favorites/:id", auth.execute, post.favoritePost);

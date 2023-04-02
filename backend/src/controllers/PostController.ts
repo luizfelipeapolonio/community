@@ -90,7 +90,7 @@ export class PostController {
     }
 
     async deletePost(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id } = req.body;
         const authUser: UserMongooseType = res.locals.user;
 
         try {
