@@ -5,6 +5,7 @@ import styles from "./Profile.module.css";
 import Loading from "../../components/Loading";
 import DefaultUser from "../../components/layout/DefaultUser";
 import Image from "../../components/Image";
+import DeleteModal from "../../components/DeleteModal";
 
 // Icons
 import { FaUserEdit, FaExclamationTriangle, FaTrashAlt, FaEdit } from "react-icons/fa";
@@ -33,6 +34,8 @@ const Profile = () => {
     const [authUser, setAuthUser] = useState<IAuthenticatedUser | null>(null);
     const [notFound, setNotFound] = useState<boolean>(false);
     const [posts, setPosts] = useState<IPost[]>([]);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [postId, setPostId] = useState<string>("");
 
     const { id } = useParams();
     const dispatch = useDispatch<AppDispatch>();
@@ -88,6 +91,20 @@ const Profile = () => {
         }
     }, [userPosts]);
 
+    // Hide or show scroll bar if modal is open/closed
+    useEffect(() => {
+        if(isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+    }, [isOpen]);
+
+    const openDeleteModal = (postId: string) => {
+        setIsOpen(true);
+        setPostId(postId);
+    }
+
     return (
         <div className={styles.profile_container}>
             {(loading || postsLoading) ? <Loading /> : (
@@ -134,7 +151,7 @@ const Profile = () => {
                                     />
                                     {isAuthUser && !authLoading && (
                                         <div className={styles.post_actions}>
-                                            <button type="button">
+                                            <button type="button" onClick={() => openDeleteModal(post._id)}>
                                                 <FaTrashAlt />
                                                 Excluir
                                             </button>
@@ -149,6 +166,9 @@ const Profile = () => {
                         )}
                     </div>
                     {user && posts.length === 0 && <p className={styles.noposts}>Ainda não há posts</p>}
+                    {isOpen && (
+                        <DeleteModal postId={postId} setModalVisibility={setIsOpen} />
+                    )}
                 </>
             )}
         </div>

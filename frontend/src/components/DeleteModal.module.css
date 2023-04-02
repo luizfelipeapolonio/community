@@ -1,0 +1,73 @@
+.deleteModal_fade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    z-index: 200;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: opacityEffect 0.3s ease-in-out;
+}
+
+.deleteModal_container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: rgb(35, 35, 34);
+    width: 40%;
+    font-size: 1.9rem;
+    padding: 2rem;
+    border-radius: 8px;
+    animation: moveDown 0.3s;
+}
+
+.deleteModal_container .deleteModal_actions {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+}
+
+.deleteModal_container .deleteModal_actions button {
+    font-size: 1.7rem;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    color: #e1e1e6;
+    border: none;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.deleteModal_container .deleteModal_actions button:nth-child(1) {
+    background-color: #b00a28;
+}
+
+.deleteModal_container .deleteModal_actions button:nth-child(1):hover {
+    background-color: #910922;
+}
+
+.deleteModal_container .deleteModal_actions button:nth-child(2) {
+    background-color: #4b4b4d;
+}
+
+.deleteModal_container .deleteModal_actions button:nth-child(2):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes opacityEffect {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }   
+}
+
+@keyframes moveDown {
+    from {
+        transform: translateY(-20px);
+    } to {
+        transform: translateY(0px);
+    }
+}
