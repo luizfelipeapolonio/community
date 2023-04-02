@@ -96,6 +96,23 @@ export const updatePost = createAsyncThunk<IApiResponse | null, {id: string, bod
     }
 );
 
+export const deletePost = createAsyncThunk<IApiResponse | null, {id: string}, {state: RootState}>(
+    "post/delete",
+    async ({ id }, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.deletePost({ id }, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
 const postSlice = createSlice({
     name: "post",
     initialState,
@@ -188,6 +205,23 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(updatePost.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(deletePost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(deletePost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(deletePost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

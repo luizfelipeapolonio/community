@@ -81,12 +81,28 @@ const updatePost = async (id: string, body: IPostEditBody, token: string): Promi
     }
 }
 
+const deletePost = async ({ id }: {id: string}, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("DELETE", { id }, token, false);
+
+    try {
+        const response = await fetch(api + "/posts/", config as RequestInit);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
     createPost,
     getPostById,
-    updatePost
+    updatePost,
+    deletePost
 }
 
 export default postService;

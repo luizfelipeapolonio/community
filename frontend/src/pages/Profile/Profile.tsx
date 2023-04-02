@@ -88,6 +88,13 @@ const Profile = () => {
                 setPosts(userPosts.payload as IPost[]);
                 dispatch(resetPostStates());
             }
+
+            if(userPosts.status === "success" && typeof userPosts.message === "string") {
+                if(userPosts.message.includes("excluído")) {
+                    if(!id) return;
+                    dispatch(getUserPosts(id));
+                }
+            }
         }
     }, [userPosts]);
 
