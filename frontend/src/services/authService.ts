@@ -4,7 +4,7 @@ import { api, requestConfig } from "../config/requestConfig";
 import { 
     IUserRegisterBody, 
     IUserLoginBody 
-} from "../types/authService.types";
+} from "../types/auth.types";
 import { IApiResponse } from "../types/shared.types";
 
 const register = async (data: IUserRegisterBody): Promise<IApiResponse | null> => {

@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Reducers
 import { createPost } from "../../slices/postSlice";
-import { IPostCreateBody } from "../../types/postSlice.types";
+import { IPostCreateBody } from "../../types/post.types";
 
 // Utils
 import { extractFormMessages } from "../../utils/extractFormMessages";

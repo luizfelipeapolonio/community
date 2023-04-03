@@ -22,7 +22,7 @@ import {
 // Types
 import { AppDispatch, RootState } from "../../config/store";
 import { IUser } from "../../types/shared.types";
-import { IUpdateBody } from "../../types/userService.types";
+import { IUpdateBody } from "../../types/user.types";
 
 import { uploads } from "../../config/requestConfig";
 

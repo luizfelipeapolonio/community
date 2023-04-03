@@ -13,7 +13,7 @@ import { FaUserEdit, FaExclamationTriangle, FaTrashAlt, FaEdit } from "react-ico
 // Types
 import { RootState, AppDispatch } from "../../config/store";
 import { IUser, IPost } from "../../types/shared.types";
-import { IAuthenticatedUser } from "../../types/authSlice.types";
+import { IAuthenticatedUser } from "../../types/auth.types";
 
 import { Link } from "react-router-dom";
 

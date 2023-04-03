@@ -2,7 +2,7 @@ import { api, requestConfig } from "../config/requestConfig";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IUpdateBody } from "../types/userService.types";
+import { IUpdateBody } from "../types/user.types";
 
 const profile = async (token: string): Promise<IApiResponse | null> => {
     const config = requestConfig("GET", null, token, false);

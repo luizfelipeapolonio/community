@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Types
-import { IUserInitialState } from "../types/userSlice.types";
-import { IUpdateBody } from "../types/userService.types";
+import { IUserInitialState, IUpdateBody } from "../types/user.types";
 import { IApiResponse } from "../types/shared.types";
 import { RootState } from "../config/store";
 

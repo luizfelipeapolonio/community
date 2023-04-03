@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IPostInitialState, IPostCreateBody, IPostEditBody } from "../types/postSlice.types";
+import { IPostInitialState, IPostCreateBody, IPostEditBody } from "../types/post.types";
 import { RootState } from "../config/store";
 
 // Service

@@ -2,7 +2,7 @@ import { api, requestConfig } from "../config/requestConfig";
 
 // Types
 import { IApiResponse } from "../types/shared.types";
-import { IPostCreateBody, IPostEditBody } from "../types/postSlice.types";
+import { IPostCreateBody, IPostEditBody } from "../types/post.types";
 
 const getUserPosts = async (id: string, token: string): Promise<IApiResponse | null> => {
     const config = requestConfig("GET", null, token, false);

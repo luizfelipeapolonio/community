@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Types
-import { IUserRegisterBody, IUserLoginBody } from "../types/authService.types";
-import { IAuthInitialState } from "../types/authSlice.types";
+import { IUserRegisterBody, IUserLoginBody, IAuthInitialState } from "../types/auth.types";
 import { IApiResponse } from "../types/shared.types";
 
 // Utils
