@@ -26,7 +26,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { uploads } from "../../config/requestConfig";
 
 // Reducers
-import { getUserById } from "../../slices/userSlice";
+import { resetUserStates, getUserById } from "../../slices/userSlice";
 import { resetPostStates, getUserPosts } from "../../slices/postSlice";
 
 const Profile = () => {
@@ -69,6 +69,7 @@ const Profile = () => {
                 if(payload.message.includes("encontrado")) {
                     setUser(payload.payload as IUser);
                     setNotFound(false);
+                    dispatch(resetUserStates());
                 }
             }
 
@@ -150,7 +151,7 @@ const Profile = () => {
                         {user && posts.length > 0 && (
                             posts.map((post) => (
                                 <div className={styles.postcard} key={post._id}>
-                                    <Link to="#">{post.title}</Link>
+                                    <Link to={`/post/${post._id}`}>{post.title}</Link>
                                     <img 
                                         src={`${uploads}/posts/${post.image}`}
                                         alt={post.title}
