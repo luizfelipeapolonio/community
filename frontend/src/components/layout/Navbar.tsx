@@ -1,5 +1,8 @@
 import styles from "./Navbar.module.css";
 
+// Components
+import Image from "../Image";
+
 // Icons
 import { 
     FaUsers, 
@@ -133,8 +136,16 @@ const Navbar = () => {
                             <div className={styles.user}>
                                 <>
                                     {user.profileImage ? (
-                                        <img src={`${uploads}/users/${user.profileImage}`} alt="Imagem de Perfil" />
-                                    ) : <div><FaUser /></div>}
+                                        <Image 
+                                            src={`${uploads}/users/${user.profileImage}`} 
+                                            alt="Imagem de Perfil"
+                                            width="48px"
+                                            height="48px"
+                                            placeholderWidth="48px"
+                                            placeholderHeight="48px"
+                                            borderRadius="50%"
+                                        />
+                                    ) : <div className={styles.defaultUser}><FaUser /></div>}
                                     <span>{user.name}</span>
                                     <p>{user.email}</p>
                                 </>

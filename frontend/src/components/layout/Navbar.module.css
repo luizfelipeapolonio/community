@@ -154,16 +154,7 @@
     color: #c2c2c3;
 }
 
-.drop_menu .user img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center;
-    margin-bottom: 1rem;
-}
-
-.drop_menu .user div {
+.drop_menu .user .defaultUser {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,7 +168,7 @@
 .drop_menu .user span {
     font-size: 1.9rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin: 1rem 0 0.5rem;
     color: #00b37e;
 }
 
