@@ -99,15 +99,6 @@ const Profile = () => {
         }
     }, [userPosts]);
 
-    // Hide or show scroll bar if modal is open/closed
-    useEffect(() => {
-        if(isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
-    }, [isOpen]);
-
     const openDeleteModal = (postId: string) => {
         setIsOpen(true);
         setPostId(postId);
