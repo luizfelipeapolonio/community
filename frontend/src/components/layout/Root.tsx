@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Loading from "../Loading";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // Hooks
 import { useAuth } from "../../hooks/useAuth";
@@ -20,6 +20,7 @@ const Root = () => {
             <Navbar />
             <main className={styles.main}>
                 <Outlet />
+                <ScrollRestoration />
             </main>
             <Footer />
         </>
