@@ -55,10 +55,11 @@
 
 .postDetails .social {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1.7rem;
     font-size: 1.7rem;
     margin: 1.8rem 0;
+    padding: 0 1.5rem;
 }
 
 .postDetails .social button {
@@ -71,21 +72,32 @@
 }
 
 .postDetails .social button svg {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
 }
 
-.postDetails .social .like,
-.postDetails .social .dislike {
+.postDetails .social .like_dislike {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.7rem;
+}
+
+.postDetails .social .like_dislike .like,
+.postDetails .social .like_dislike .dislike {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.3rem;
 }
 
-.postDetails .social .like button svg {
+.postDetails .social .like_dislike .like button svg {
     color: #8cc84b;
 }
 
-.postDetails .social .dislike button svg {
+.postDetails .social .like_dislike .dislike button svg {
     color: #da3251;
+}
+
+.postDetails .social .favorite button svg {
+    color: #1fb5d7;
 }

@@ -11,7 +11,9 @@ import {
     BsHandThumbsUpFill,
     BsHandThumbsDown,
     BsHandThumbsDownFill,
-    BsChatRightText 
+    BsChatRightText,
+    BsBookmarkStar,
+    BsFillBookmarkStarFill
 } from "react-icons/bs";
 
 // Types
@@ -28,7 +30,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Reducers
-import { resetPostStates, getPostById } from "../../slices/postSlice";
+import { resetPostStates, getPostById, likePost } from "../../slices/postSlice";
 import { resetUserStates, getUserById } from "../../slices/userSlice";
 
 const Post = () => {
@@ -38,8 +40,9 @@ const Post = () => {
     const { id } = useParams();
 
     const dispatch = useDispatch<AppDispatch>();
-    const { payload: postPayload, loading: postLoading } = useSelector((state: RootState) => state.post);
+    const { payload: postPayload, loading: postLoading, post: postState } = useSelector((state: RootState) => state.post);
     const { payload: userPayload, loading: userLoading } = useSelector((state: RootState) => state.user);
+    const { user: authUser } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         if(!id) return;
@@ -48,9 +51,11 @@ const Post = () => {
     
     useEffect(() => {
         if(postPayload) {
-            if(postPayload.status === "success") {
-                setPost(postPayload.payload as IPost);
-                dispatch(resetPostStates());
+            if(postPayload.status === "success" && typeof postPayload.message === "string") {
+                if(postPayload.message.includes("Post encontrado")) {
+                    setPost(postPayload.payload as IPost);
+                    dispatch(resetPostStates());
+                }
             }
         }
     }, [postPayload]);
@@ -69,6 +74,13 @@ const Post = () => {
             }
         }
     }, [userPayload]);
+
+    const like = async () => {
+        if(!id) return;
+        await dispatch(likePost(id));
+    }
+
+    console.log("POST: ", postState);
 
     return (
         <div className={styles.postDetails_container}>
@@ -107,14 +119,27 @@ const Post = () => {
                         />
                     </div>
                     <div className={styles.social}>
-                        <div className={styles.like}>
-                            <button type="button"><BsHandThumbsUp /></button>
-                            <span>{post.likes.length}</span>
-                        </div>
-                        <div className={styles.dislike}>
-                            <button type="button"><BsHandThumbsDown /></button>
-                            <span>{post.dislikes.length}</span>
-                        </div>
+                        {postState && authUser && (
+                        <>
+                            <div className={styles.like_dislike}>
+                                <div className={styles.like}>
+                                    <button type="button" onClick={like}>
+                                        {postState.likes.includes(authUser._id) ? 
+                                            <BsHandThumbsUpFill /> : <BsHandThumbsUp />
+                                        }
+                                    </button>
+                                    <span>{postState.likes.length}</span>
+                                </div>
+                                <div className={styles.dislike}>
+                                    <button type="button"><BsHandThumbsDown /></button>
+                                    <span>{post.dislikes.length}</span>
+                                </div>
+                            </div>
+                            <div className={styles.favorite}>
+                                <button type="button"><BsBookmarkStar /></button>
+                            </div>
+                        </>
+                        )}
                     </div>
                 </div>
             )}

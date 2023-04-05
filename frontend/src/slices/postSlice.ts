@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
-import { IApiResponse } from "../types/shared.types";
-import { IPostInitialState, IPostCreateBody, IPostEditBody } from "../types/post.types";
+import { IApiResponse, IPost } from "../types/shared.types";
+import { IPostInitialState, IPostCreateBody, IPostEditBody, ILikeResponse } from "../types/post.types";
 import { RootState } from "../config/store";
 
 // Service
 import postService from "../services/postService";
 
 const initialState: IPostInitialState = {
+    post: null,
     loading: false,
     success: false,
     error: false,
@@ -113,6 +114,23 @@ export const deletePost = createAsyncThunk<IApiResponse | null, {id: string}, {s
     }
 );
 
+export const likePost = createAsyncThunk<IApiResponse | null, string, {state: RootState}>(
+    "post/like",
+    async (id, ThunkAPI) => {
+        const token: string | undefined = ThunkAPI.getState().auth.user?.token;
+        
+        if(!token) return null;
+
+        const data = await postService.likePost(id, token);
+
+        if(data && data.status === "error") {
+            return ThunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
 const postSlice = createSlice({
     name: "post",
     initialState,
@@ -186,6 +204,9 @@ const postSlice = createSlice({
             state.success = true;
             state.error = false;
             state.payload = action.payload;
+            if(action.payload) {
+                state.post = action.payload.payload as IPost;
+            }
         })
         .addCase(getPostById.rejected, (state, action) => {
             state.loading = false;
@@ -222,6 +243,34 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(deletePost.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(likePost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(likePost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+
+            // Adds or deletes user Id from likes array without making a new request
+            if(state.post && action.payload) {
+                if(state.post.likes.includes((action.payload as ILikeResponse).payload.userId)) {
+                    state.post.likes = state.post.likes.filter((id) => {
+                        return id !== (action.payload as ILikeResponse).payload.userId;
+                    });
+                } else {
+                    state.post.likes.push((action.payload as ILikeResponse).payload.userId);
+                }
+            }
+        })
+        .addCase(likePost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

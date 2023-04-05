@@ -1,6 +1,7 @@
-import { IApiResponse } from "./shared.types";
+import { IApiResponse, IPost } from "./shared.types";
 
 export interface IPostInitialState {
+    post: IPost | null;
     loading: boolean;
     success: boolean;
     error: boolean;
@@ -17,4 +18,12 @@ export interface IPostCreateBody {
 export interface IPostEditBody {
     tags?: string[];
     content?: string;
+}
+
+export interface ILikeResponse extends IApiResponse {
+    payload: {
+        userId: string;
+        userName: string;
+        postId: string;
+    };
 }

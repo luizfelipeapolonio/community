@@ -96,13 +96,29 @@ const deletePost = async ({ id }: {id: string}, token: string): Promise<IApiResp
     }
 }
 
+const likePost = async (id: string, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("PATCH", null, token, false);
+
+    try {
+        const response = await fetch(api + `/posts/like/${id}`, config);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
     createPost,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    likePost
 }
 
 export default postService;
