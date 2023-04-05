@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
 import { IApiResponse, IPost } from "../types/shared.types";
-import { IPostInitialState, IPostCreateBody, IPostEditBody, ILikeResponse } from "../types/post.types";
+import { IPostInitialState, IPostCreateBody, IPostEditBody, ILikeDislikeResponse } from "../types/post.types";
 import { RootState } from "../config/store";
 
 // Service
@@ -125,6 +125,23 @@ export const likePost = createAsyncThunk<IApiResponse | null, string, {state: Ro
 
         if(data && data.status === "error") {
             return ThunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
+export const dislikePost = createAsyncThunk<IApiResponse | null, string, {state: RootState}>(
+    "post/dislike",
+    async (id, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.dislikePost(id, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
         }
 
         return data;
@@ -261,12 +278,19 @@ const postSlice = createSlice({
 
             // Adds or deletes user Id from likes array without making a new request
             if(state.post && action.payload) {
-                if(state.post.likes.includes((action.payload as ILikeResponse).payload.userId)) {
+                if(state.post.likes.includes((action.payload as ILikeDislikeResponse).payload.userId)) {
                     state.post.likes = state.post.likes.filter((id) => {
-                        return id !== (action.payload as ILikeResponse).payload.userId;
+                        return id !== (action.payload as ILikeDislikeResponse).payload.userId;
                     });
                 } else {
-                    state.post.likes.push((action.payload as ILikeResponse).payload.userId);
+                    state.post.likes.push((action.payload as ILikeDislikeResponse).payload.userId);
+                }
+
+                // Check if user have already disliked the post, if so, remove it
+                if(state.post.dislikes.includes((action.payload as ILikeDislikeResponse).payload.userId)) {
+                    state.post.dislikes = state.post.dislikes.filter((id) => {
+                        return id !== (action.payload as ILikeDislikeResponse).payload.userId;
+                    });
                 }
             }
         })
@@ -275,6 +299,35 @@ const postSlice = createSlice({
             state.success = false;
             state.error = true;
             state.payload = action.payload as IApiResponse;
+        })
+        .addCase(dislikePost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(dislikePost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+
+            // Adds or deletes user Id from dislikes array without making a new request
+            if(state.post && action.payload) {
+                if(state.post.dislikes.includes((action.payload as ILikeDislikeResponse).payload.userId)) {
+                    state.post.dislikes = state.post.dislikes.filter((id) => {
+                        return id !== (action.payload as ILikeDislikeResponse).payload.userId;
+                    });
+                } else {
+                    state.post.dislikes.push((action.payload as ILikeDislikeResponse).payload.userId);
+                }
+
+                // Check if user have already liked the post, if so, remove it
+                if(state.post.likes.includes((action.payload as ILikeDislikeResponse).payload.userId)) {
+                    state.post.likes = state.post.likes.filter((id) => {
+                        return id !== (action.payload as ILikeDislikeResponse).payload.userId;
+                    });
+                }
+            }
         })
     }
 });

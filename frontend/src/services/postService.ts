@@ -111,6 +111,21 @@ const likePost = async (id: string, token: string): Promise<IApiResponse | null>
     }
 }
 
+const dislikePost = async (id: string, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("PATCH", null, token, false);
+
+    try {
+        const response = await fetch(api + `/posts/dislike/${id}`, config);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
@@ -118,7 +133,8 @@ const postService = {
     getPostById,
     updatePost,
     deletePost,
-    likePost
+    likePost,
+    dislikePost
 }
 
 export default postService;

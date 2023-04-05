@@ -20,7 +20,7 @@ export interface IPostEditBody {
     content?: string;
 }
 
-export interface ILikeResponse extends IApiResponse {
+export interface ILikeDislikeResponse extends IApiResponse {
     payload: {
         userId: string;
         userName: string;

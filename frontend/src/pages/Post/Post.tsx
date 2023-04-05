@@ -30,7 +30,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Reducers
-import { resetPostStates, getPostById, likePost } from "../../slices/postSlice";
+import { resetPostStates, getPostById, likePost, dislikePost } from "../../slices/postSlice";
 import { resetUserStates, getUserById } from "../../slices/userSlice";
 
 const Post = () => {
@@ -78,6 +78,11 @@ const Post = () => {
     const like = async () => {
         if(!id) return;
         await dispatch(likePost(id));
+    }
+
+    const dislike = async () => {
+        if(!id) return;
+        await dispatch(dislikePost(id));
     }
 
     console.log("POST: ", postState);
@@ -131,8 +136,12 @@ const Post = () => {
                                     <span>{postState.likes.length}</span>
                                 </div>
                                 <div className={styles.dislike}>
-                                    <button type="button"><BsHandThumbsDown /></button>
-                                    <span>{post.dislikes.length}</span>
+                                    <button type="button" onClick={dislike}>
+                                        {postState.dislikes.includes(authUser._id) ? 
+                                            <BsHandThumbsDownFill /> : <BsHandThumbsDown />
+                                        }
+                                    </button>
+                                    <span>{postState.dislikes.length}</span>
                                 </div>
                             </div>
                             <div className={styles.favorite}>
