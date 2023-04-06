@@ -126,6 +126,21 @@ const dislikePost = async (id: string, token: string): Promise<IApiResponse | nu
     }
 }
 
+const insertComment = async (id: string, { content }: { content: string }, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("PATCH", { content }, token, false);
+
+    try {
+        const response = await fetch(api + `/posts/comment/${id}`, config as RequestInit);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
@@ -134,7 +149,8 @@ const postService = {
     updatePost,
     deletePost,
     likePost,
-    dislikePost
+    dislikePost,
+    insertComment
 }
 
 export default postService;

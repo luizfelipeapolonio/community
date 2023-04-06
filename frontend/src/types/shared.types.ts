@@ -17,6 +17,16 @@ export interface IUser {
     profileImage?: string;
 }
 
+export interface IComment {
+    userId: string;
+    userName: string;
+    profileImage?: string;
+    content: string;
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface IPost {
     _id: string;
     image: string;
@@ -27,7 +37,7 @@ export interface IPost {
     tags: string[];
     userId: string;
     userName: string;
-    comments: string[];
+    comments: IComment[];
     createdAt: string;
     updatedAt: string;
     __v: number;

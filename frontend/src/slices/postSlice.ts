@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
-import { IApiResponse, IPost } from "../types/shared.types";
-import { IPostInitialState, IPostCreateBody, IPostEditBody, ILikeDislikeResponse } from "../types/post.types";
+import { IApiResponse, IPost, IComment } from "../types/shared.types";
+import { 
+    IPostInitialState, 
+    IPostCreateBody, 
+    IPostEditBody, 
+    ILikeDislikeResponse
+} from "../types/post.types";
 import { RootState } from "../config/store";
 
 // Service
@@ -147,6 +152,23 @@ export const dislikePost = createAsyncThunk<IApiResponse | null, string, {state:
         return data;
     }
 );
+
+export const insertComment = createAsyncThunk<IApiResponse | null, {id: string, content: string}, {state: RootState}>(
+    "post/insertComment",
+    async ({ id, content }, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.insertComment(id, { content }, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+)
 
 const postSlice = createSlice({
     name: "post",
@@ -328,6 +350,28 @@ const postSlice = createSlice({
                     });
                 }
             }
+        })
+        .addCase(insertComment.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(insertComment.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+
+            // Add comment to post state comments array  
+            if(state.post && action.payload) {
+                state.post.comments.unshift(action.payload.payload as IComment);
+            }
+        })
+        .addCase(insertComment.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
         })
     }
 });

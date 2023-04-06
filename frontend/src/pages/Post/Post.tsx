@@ -26,18 +26,30 @@ import { Link } from "react-router-dom";
 
 // Hooks
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { usePlaceholderImage } from "../../hooks/usePlaceholderImage";
 
 // Reducers
-import { resetPostStates, getPostById, likePost, dislikePost } from "../../slices/postSlice";
+import { 
+    resetPostStates, 
+    getPostById, 
+    likePost, 
+    dislikePost, 
+    insertComment 
+} from "../../slices/postSlice";
 import { resetUserStates, getUserById } from "../../slices/userSlice";
 
 const Post = () => {
     const [post, setPost] = useState<IPost | null>(null);
     const [user, setUser] = useState<IUser | null>(null);
-
+    const [comment, setComment] = useState<string>("");
+    // const [commentsIsVisible, setCommentIsVisible] = useState<boolean>(false);
+    const [isCommentInputFocused, setIsCommentInputFocused] = useState<boolean>(false);
+    
     const { id } = useParams();
+    // const commentsContainerRef = useRef<HTMLDivElement>(null!);
+    // usePlaceholderImage(commentsContainerRef, setCommentIsVisible);
 
     const dispatch = useDispatch<AppDispatch>();
     const { payload: postPayload, loading: postLoading, post: postState } = useSelector((state: RootState) => state.post);
@@ -75,6 +87,12 @@ const Post = () => {
         }
     }, [userPayload]);
 
+    // useEffect(() => {
+    //     if(commentsIsVisible) {
+
+    //     }
+    // }, [commentsIsVisible]);
+
     const like = async () => {
         if(!id) return;
         await dispatch(likePost(id));
@@ -85,12 +103,29 @@ const Post = () => {
         await dispatch(dislikePost(id));
     }
 
+    const handleComment = async (e: FormEvent) => {
+        e.preventDefault();
+
+        if(!id) return;
+
+        await dispatch(insertComment({ id, content: comment }));
+
+        cleanupComment();
+    }
+
+    const cleanupComment = () => {
+        setIsCommentInputFocused(false);
+        setComment("");
+    }
+
     console.log("POST: ", postState);
+    // console.log("POST PAYLOAD: ", postPayload);
 
     return (
         <div className={styles.postDetails_container}>
             {(!post || !user) && <Loading />}
             {post && user && (
+            <>
                 <div className={styles.postDetails}>
                     <h1>{post.title}</h1>
                     <div className={styles.user}>
@@ -151,6 +186,49 @@ const Post = () => {
                         )}
                     </div>
                 </div>
+                <div className={styles.comments_container}>
+                    {postState && (
+                        <>
+                            <div className={styles.commentsCount}>
+                                <span>{postState.comments.length}</span>
+                                {postState.comments.length === 1 ? <p>comentário</p> : <p>comentários</p>}
+                            </div>
+                            <form onSubmit={handleComment}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Adicione um comentário..." 
+                                    value={comment}
+                                    onFocus={() => setIsCommentInputFocused(true)}
+                                    onChange={(e) => setComment(e.target.value)}
+                                />
+                                <div className={styles.underline}></div>
+                                {isCommentInputFocused && (
+                                    <div className={styles.buttons}>
+                                        <button 
+                                            type="button" 
+                                            onClick={cleanupComment}
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <input type="submit" value="Comentar" disabled={comment === "" ? true : false} />
+                                    </div>
+                                )}
+                            </form>
+                            {postState && postState.comments.length > 0 ? (
+                                <div className={styles.commentsList}>
+                                    {postState.comments.map((comment) => (
+                                        <div key={comment._id} className={styles.content}>
+                                            {comment.content}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p>Ainda não há comentários</p>
+                            )}
+                        </>
+                    )}
+                </div>
+            </>
             )}
         </div>
     );
