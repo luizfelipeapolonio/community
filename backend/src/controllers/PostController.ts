@@ -437,14 +437,16 @@ export class PostController {
                 profileImage: authUser.profileImage
             }
 
-            post.comments.push(userComment);
+            post.comments.unshift(userComment);
 
             await post.save();
+
+            const commentAdded = post.comments.at(0);
             
             return res.status(200).json({
                 status: "success",
                 message: "Comentário adicionado com sucesso!",
-                payload: userComment
+                payload: commentAdded
             });
 
         } catch(error: any) {
