@@ -4,6 +4,7 @@ import styles from "./Post.module.css";
 // Components
 import Image from "../../components/Image";
 import Loading from "../../components/Loading";
+import DefaultUser from "../../components/layout/DefaultUser";
 
 // Icons
 import { 
@@ -217,13 +218,29 @@ const Post = () => {
                             {postState && postState.comments.length > 0 ? (
                                 <div className={styles.commentsList}>
                                     {postState.comments.map((comment) => (
-                                        <div key={comment._id} className={styles.content}>
-                                            {comment.content}
+                                        <div key={comment._id} className={styles.comment}>
+                                            {comment.profileImage ? (
+                                                <Image 
+                                                    src={`${uploads}/users/${comment.profileImage}`}
+                                                    alt={comment.userName}
+                                                    width="32px"
+                                                    height="32px"
+                                                    placeholderWidth="32px"
+                                                    placeholderHeight="32px"
+                                                    borderRadius="50%"
+                                                />
+                                            ) : <DefaultUser size="32px" fontSize="1.6rem" />}
+                                            <div className={styles.commentContent}>
+                                                <span>{comment.userName}</span>
+                                                <p>{comment.content}</p>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <p>Ainda não há comentários</p>
+                                <p style={{ textAlign: "center", fontSize: "2rem" }}>
+                                    Ainda não há comentários
+                                </p>
                             )}
                         </>
                     )}
