@@ -10,10 +10,19 @@ export interface IPostUpdateBody {
     tags?: string[] | undefined;
 }
 
+export interface IPostDeleteBody {
+    id: string;
+}
+
 export interface IPostCommentBody {
     content: string;
+}
+
+export interface ICommentDeleteBody {
+    commentId: string;
 }
 
 export interface IRequestQuery {
     q: string;
 }
+

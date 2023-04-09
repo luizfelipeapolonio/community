@@ -51,7 +51,7 @@ export class PostRoutes {
             post.insertComment
         );
         this.router.patch(
-            "/comment/:id/remove/:commentId", 
+            "/comment/:id/remove", 
             auth.execute, 
             post.deleteComment
         );

@@ -13,8 +13,10 @@ import { ITypedRequestBody } from "../types/SharedTypes";
 import { 
     IPostCreateBody, 
     IPostUpdateBody, 
-    IPostCommentBody, 
-    IRequestQuery 
+    IPostCommentBody,
+    IPostDeleteBody,
+    IRequestQuery,
+    ICommentDeleteBody
 } from "../types/PostTypes";
 import { UserMongooseType } from "../types/UserTypes";
 import { IComment } from "../models/Post";
@@ -89,7 +91,7 @@ export class PostController {
         }
     }
 
-    async deletePost(req: Request, res: Response) {
+    async deletePost(req: ITypedRequestBody<IPostDeleteBody>, res: Response) {
         const { id } = req.body;
         const authUser: UserMongooseType = res.locals.user;
 
@@ -459,8 +461,9 @@ export class PostController {
         }
     }
 
-    async deleteComment(req: Request, res: Response) {
-        const { id, commentId } = req.params;
+    async deleteComment(req: ITypedRequestBody<ICommentDeleteBody>, res: Response) {
+        const { id } = req.params;
+        const { commentId } = req.body;
         const authUser: UserMongooseType = res.locals.user;
 
         try {
