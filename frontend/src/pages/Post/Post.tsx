@@ -14,8 +14,10 @@ import {
     BsHandThumbsDownFill,
     BsChatRightText,
     BsBookmarkStar,
-    BsFillBookmarkStarFill
+    BsFillBookmarkStarFill,
+    BsThreeDotsVertical
 } from "react-icons/bs";
+import { FaTrashAlt } from "react-icons/fa";
 
 // Types
 import { AppDispatch, RootState } from "../../config/store";
@@ -27,9 +29,8 @@ import { Link } from "react-router-dom";
 
 // Hooks
 import { useParams } from "react-router-dom";
-import { useState, useEffect, useRef, FormEvent } from "react";
+import { useState, useEffect, FormEvent, MouseEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { usePlaceholderImage } from "../../hooks/usePlaceholderImage";
 
 // Reducers
 import { 
@@ -45,12 +46,11 @@ const Post = () => {
     const [post, setPost] = useState<IPost | null>(null);
     const [user, setUser] = useState<IUser | null>(null);
     const [comment, setComment] = useState<string>("");
-    // const [commentsIsVisible, setCommentIsVisible] = useState<boolean>(false);
     const [isCommentInputFocused, setIsCommentInputFocused] = useState<boolean>(false);
+    const [toggleDeleteButton, setToggleDeleteButton] = useState<boolean>(false);
+    const [commentId, setCommentId] = useState<string>("");
     
     const { id } = useParams();
-    // const commentsContainerRef = useRef<HTMLDivElement>(null!);
-    // usePlaceholderImage(commentsContainerRef, setCommentIsVisible);
 
     const dispatch = useDispatch<AppDispatch>();
     const { payload: postPayload, loading: postLoading, post: postState } = useSelector((state: RootState) => state.post);
@@ -117,6 +117,11 @@ const Post = () => {
     const cleanupComment = () => {
         setIsCommentInputFocused(false);
         setComment("");
+    }
+
+    const toggleDeleteCommentButton = (e: MouseEvent<HTMLButtonElement>) => {
+        setCommentId(e.currentTarget.id);
+        setToggleDeleteButton((visibility) => !visibility);
     }
 
     console.log("POST: ", postState);
@@ -191,7 +196,7 @@ const Post = () => {
                     {postState && (
                         <>
                             <div className={styles.commentsCount}>
-                                <span>{postState.comments.length}</span>
+                                <span><BsChatRightText /> {postState.comments.length}</span>
                                 {postState.comments.length === 1 ? <p>comentário</p> : <p>comentários</p>}
                             </div>
                             <form onSubmit={handleComment}>
@@ -233,6 +238,31 @@ const Post = () => {
                                             <div className={styles.commentContent}>
                                                 <span>{comment.userName}</span>
                                                 <p>{comment.content}</p>
+                                            </div>
+                                            <div className={styles.deleteComment}>
+                                                {authUser && authUser._id === comment.userId && (
+                                                    <>
+                                                        <button 
+                                                            type="button" 
+                                                            id={comment._id} 
+                                                            className={styles.drop_button} 
+                                                            onClick={toggleDeleteCommentButton}
+                                                        >
+                                                            <BsThreeDotsVertical />
+                                                        </button>
+                                                        <div 
+                                                            className={styles.deleteComment_dropdown} 
+                                                            style={{
+                                                                display: commentId === comment._id && toggleDeleteButton ? "block" : "none"
+                                                            }}
+                                                        >
+                                                            <button type="button">
+                                                                <FaTrashAlt />
+                                                                <span>Excluir</span>
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     ))}

@@ -115,6 +115,12 @@
     font-size: 1.9rem;
 }
 
+.comments_container .commentsCount span {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .comments_container form {
     display: flex;
     flex-direction: column;
@@ -223,6 +229,59 @@
 
 .commentsList .comment .commentContent p {
     color: #c4c4c4;
+}
+
+.commentsList .comment .deleteComment {
+    position: relative;
+}
+
+.commentsList .comment .deleteComment .drop_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.4rem;
+    font-size: 1.7rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #e1e1e6;
+    transition: 0.2s ease;
+}
+
+.commentsList .comment .deleteComment .drop_button:hover {
+    background: rgba(255, 255, 255, 0.130);
+}
+
+.commentsList .comment .deleteComment .deleteComment_dropdown {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 0px;
+    min-width: 100%;
+    background-color: rgb(35, 35, 34);
+    padding: 0.7rem;
+    border-radius: 8px;
+}
+
+.commentsList .comment .deleteComment .deleteComment_dropdown button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 1.6rem;
+    padding: 0.4rem;
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    color: #c4c4c4;
+}
+
+.commentsList .comment .deleteComment .deleteComment_dropdown button svg {
+    color: #da3251;
+}
+
+.commentsList .comment .deleteComment .deleteComment_dropdown button span {
+    font-weight: 500;
 }
 
 @keyframes opacityEffect {
