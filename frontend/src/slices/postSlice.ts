@@ -168,7 +168,24 @@ export const insertComment = createAsyncThunk<IApiResponse | null, {id: string, 
 
         return data;
     }
-)
+);
+
+export const deleteComment = createAsyncThunk<IApiResponse | null, {id: string, commentId: string}, {state: RootState}>(
+    "post/deleteComment",
+    async ({ id, commentId }, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+
+        if(!token) return null;
+
+        const data = await postService.deleteComment(id, { commentId }, token);
+        
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
 
 const postSlice = createSlice({
     name: "post",
@@ -368,6 +385,32 @@ const postSlice = createSlice({
             }
         })
         .addCase(insertComment.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(deleteComment.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(deleteComment.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+
+            // Remove the deleted comment from post state comments array
+            if(state.post) {
+                state.post.comments = state.post.comments.filter((comment) => {
+                    if(action.payload) {
+                        return comment._id !== (action.payload.payload as IComment[])[0]._id;
+                    }
+                });
+            }
+        })
+        .addCase(deleteComment.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

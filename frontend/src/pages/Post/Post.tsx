@@ -38,7 +38,8 @@ import {
     getPostById, 
     likePost, 
     dislikePost, 
-    insertComment 
+    insertComment,
+    deleteComment 
 } from "../../slices/postSlice";
 import { resetUserStates, getUserById } from "../../slices/userSlice";
 
@@ -54,7 +55,7 @@ const Post = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { payload: postPayload, loading: postLoading, post: postState } = useSelector((state: RootState) => state.post);
-    const { payload: userPayload, loading: userLoading } = useSelector((state: RootState) => state.user);
+    const { payload: userPayload } = useSelector((state: RootState) => state.user);
     const { user: authUser } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
@@ -88,12 +89,6 @@ const Post = () => {
         }
     }, [userPayload]);
 
-    // useEffect(() => {
-    //     if(commentsIsVisible) {
-
-    //     }
-    // }, [commentsIsVisible]);
-
     const like = async () => {
         if(!id) return;
         await dispatch(likePost(id));
@@ -104,12 +99,13 @@ const Post = () => {
         await dispatch(dislikePost(id));
     }
 
-    const handleComment = async (e: FormEvent) => {
+    const handleInsertComment = async (e: FormEvent) => {
         e.preventDefault();
 
         if(!id) return;
 
         await dispatch(insertComment({ id, content: comment }));
+        dispatch(resetPostStates());
 
         cleanupComment();
     }
@@ -124,8 +120,22 @@ const Post = () => {
         setToggleDeleteButton((visibility) => !visibility);
     }
 
-    console.log("POST: ", postState);
-    // console.log("POST PAYLOAD: ", postPayload);
+    const handleDeleteComment = async(commentId: string) => {
+        if(!id) return;
+
+        const comment = {
+            id,
+            commentId
+        }
+
+        await dispatch(deleteComment(comment));
+        dispatch(resetPostStates());
+        
+        setToggleDeleteButton(false);
+    }
+
+    // console.log("POST: ", postState);
+    console.log("POST PAYLOAD: ", postPayload);
 
     return (
         <div className={styles.postDetails_container}>
@@ -199,7 +209,7 @@ const Post = () => {
                                 <span><BsChatRightText /> {postState.comments.length}</span>
                                 {postState.comments.length === 1 ? <p>comentário</p> : <p>comentários</p>}
                             </div>
-                            <form onSubmit={handleComment}>
+                            <form onSubmit={handleInsertComment}>
                                 <input 
                                     type="text" 
                                     placeholder="Adicione um comentário..." 
@@ -222,50 +232,52 @@ const Post = () => {
                             </form>
                             {postState && postState.comments.length > 0 ? (
                                 <div className={styles.commentsList}>
-                                    {postState.comments.map((comment) => (
-                                        <div key={comment._id} className={styles.comment}>
-                                            {comment.profileImage ? (
-                                                <Image 
-                                                    src={`${uploads}/users/${comment.profileImage}`}
-                                                    alt={comment.userName}
-                                                    width="32px"
-                                                    height="32px"
-                                                    placeholderWidth="32px"
-                                                    placeholderHeight="32px"
-                                                    borderRadius="50%"
-                                                />
-                                            ) : <DefaultUser size="32px" fontSize="1.6rem" />}
-                                            <div className={styles.commentContent}>
-                                                <span>{comment.userName}</span>
-                                                <p>{comment.content}</p>
-                                            </div>
-                                            <div className={styles.deleteComment}>
-                                                {authUser && authUser._id === comment.userId && (
-                                                    <>
-                                                        <button 
-                                                            type="button" 
-                                                            id={comment._id} 
-                                                            className={styles.drop_button} 
-                                                            onClick={toggleDeleteCommentButton}
-                                                        >
-                                                            <BsThreeDotsVertical />
-                                                        </button>
-                                                        <div 
-                                                            className={styles.deleteComment_dropdown} 
-                                                            style={{
-                                                                display: commentId === comment._id && toggleDeleteButton ? "block" : "none"
-                                                            }}
-                                                        >
-                                                            <button type="button">
-                                                                <FaTrashAlt />
-                                                                <span>Excluir</span>
+                                    {postLoading ? <Loading /> : (
+                                        postState.comments.map((comment) => (
+                                            <div key={comment._id} className={styles.comment}>
+                                                {comment.profileImage ? (
+                                                    <Image 
+                                                        src={`${uploads}/users/${comment.profileImage}`}
+                                                        alt={comment.userName}
+                                                        width="32px"
+                                                        height="32px"
+                                                        placeholderWidth="32px"
+                                                        placeholderHeight="32px"
+                                                        borderRadius="50%"
+                                                    />
+                                                ) : <DefaultUser size="32px" fontSize="1.6rem" />}
+                                                <div className={styles.commentContent}>
+                                                    <span>{comment.userName}</span>
+                                                    <p>{comment.content}</p>
+                                                </div>
+                                                <div className={styles.deleteComment}>
+                                                    {authUser && authUser._id === comment.userId && (
+                                                        <>
+                                                            <button 
+                                                                type="button" 
+                                                                id={comment._id} 
+                                                                className={styles.drop_button} 
+                                                                onClick={toggleDeleteCommentButton}
+                                                            >
+                                                                <BsThreeDotsVertical />
                                                             </button>
-                                                        </div>
-                                                    </>
-                                                )}
+                                                            <div 
+                                                                className={styles.deleteComment_dropdown} 
+                                                                style={{
+                                                                    display: commentId === comment._id && toggleDeleteButton ? "block" : "none"
+                                                                }}
+                                                            >
+                                                                <button type="button" onClick={() => handleDeleteComment(comment._id)}>
+                                                                    <FaTrashAlt />
+                                                                    <span>Excluir</span>
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))
+                                    )}
                                 </div>
                             ) : (
                                 <p style={{ textAlign: "center", fontSize: "2rem" }}>

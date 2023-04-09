@@ -141,6 +141,21 @@ const insertComment = async (id: string, { content }: { content: string }, token
     }
 }
 
+const deleteComment = async (id: string, { commentId }: { commentId: string }, token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("PATCH", { commentId }, token, false);
+
+    try {
+        const response = await fetch(api + `/posts/comment/${id}/remove`, config as RequestInit);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
@@ -150,7 +165,8 @@ const postService = {
     deletePost,
     likePost,
     dislikePost,
-    insertComment
+    insertComment,
+    deleteComment
 }
 
 export default postService;
