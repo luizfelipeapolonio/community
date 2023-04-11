@@ -1,0 +1,14 @@
+.favorites_container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    min-height: 400px;
+    gap: 1.5rem;
+    font-size: 1.7rem;
+}
+
+.favorites_container h1 {
+    text-align: center;
+    margin-bottom: 2.6rem;
+    color: #c4c4c4;
+}

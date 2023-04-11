@@ -171,6 +171,21 @@ const addFavoritePost = async (id: string, token: string): Promise<IApiResponse 
     }
 }
 
+const getFavoritePosts = async (token: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("GET", null, token, false);
+
+    try {
+        const response = await fetch(api + "/posts/favorites", config);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
@@ -182,7 +197,8 @@ const postService = {
     dislikePost,
     insertComment,
     deleteComment,
-    addFavoritePost
+    addFavoritePost,
+    getFavoritePosts
 }
 
 export default postService;

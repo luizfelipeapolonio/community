@@ -155,7 +155,7 @@ const Navbar = () => {
                                 <div><FaUserCircle /></div>
                                 <span>Meu Perfil</span>
                             </Link>
-                            <Link to="#" className={styles.favorite_posts} onClick={closeDropdownMenu}>
+                            <Link to="/favorites" className={styles.favorite_posts} onClick={closeDropdownMenu}>
                                 <div><FaBookmark /></div>
                                 <span>Posts Favoritos</span>
                             </Link>
