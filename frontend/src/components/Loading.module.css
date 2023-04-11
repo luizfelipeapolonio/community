@@ -4,6 +4,7 @@
     align-items: center;
     background: transparent;
     z-index: 100;
+    margin: auto;
 }
 
 .loading_container img {
