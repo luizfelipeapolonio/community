@@ -1,24 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Types
-import { IApiResponse, IPost, IComment } from "../types/shared.types";
+import { IApiResponse, IPost, IComment, IUser } from "../types/shared.types";
 import { 
     IPostInitialState, 
     IPostCreateBody, 
     IPostEditBody, 
-    ILikeDislikeResponse
+    ILikeDislikeResponse,
+    IFavoritePostResponse
 } from "../types/post.types";
 import { RootState } from "../config/store";
 
 // Service
 import postService from "../services/postService";
+import userService from "../services/userService";
 
 const initialState: IPostInitialState = {
+    favoritePosts: [],
     post: null,
     loading: false,
     success: false,
     error: false,
     payload: null
+}
+
+const posts: { postsId: string[] } = {
+    postsId: []
 }
 
 export const getUserPosts = createAsyncThunk<IApiResponse | null, string, {state: RootState}>(
@@ -72,8 +79,16 @@ export const getPostById = createAsyncThunk<IApiResponse | null, string, {state:
     "post/getById",
     async (id: string, thunkAPI) => {
         const token: string | undefined = thunkAPI.getState().auth.user?.token;
+        const authUserId: string | undefined = thunkAPI.getState().auth.user?._id;
 
         if(!token) return null;
+        if(!authUserId) return null;
+
+        const authUser = await userService.getUserById(authUserId);
+
+        if(authUser) {
+            posts.postsId = (authUser.payload as IUser).favoritePosts;
+        }
 
         const data = await postService.getPostById(id, token);
 
@@ -187,6 +202,23 @@ export const deleteComment = createAsyncThunk<IApiResponse | null, {id: string, 
     }
 );
 
+export const addFavoritePost = createAsyncThunk<IApiResponse | null, string, {state: RootState}>(
+    "post/addFavorite",
+    async (id, thunkAPI) => {
+        const token: string | undefined = thunkAPI.getState().auth.user?.token;
+        
+        if(!token) return null;
+
+        const data = await postService.addFavoritePost(id, token);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
 const postSlice = createSlice({
     name: "post",
     initialState,
@@ -260,8 +292,11 @@ const postSlice = createSlice({
             state.success = true;
             state.error = false;
             state.payload = action.payload;
+
+            // Assign postsId array to favoritePosts state
             if(action.payload) {
                 state.post = action.payload.payload as IPost;
+                state.favoritePosts = posts.postsId;
             }
         })
         .addCase(getPostById.rejected, (state, action) => {
@@ -305,7 +340,7 @@ const postSlice = createSlice({
             state.payload = action.payload as IApiResponse;
         })
         .addCase(likePost.pending, (state) => {
-            state.loading = true;
+            state.loading = false;
             state.success = false;
             state.error = false;
         })
@@ -340,7 +375,7 @@ const postSlice = createSlice({
             state.payload = action.payload as IApiResponse;
         })
         .addCase(dislikePost.pending, (state) => {
-            state.loading = true;
+            state.loading = false;
             state.success = false;
             state.error = false;
         })
@@ -411,6 +446,34 @@ const postSlice = createSlice({
             }
         })
         .addCase(deleteComment.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(addFavoritePost.pending, (state) => {
+            state.loading = false;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(addFavoritePost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+
+            // Check if user have already saved the post as favorite, if so, remove it
+            if(action.payload) {
+                if(state.favoritePosts.includes((action.payload.payload as IFavoritePostResponse).postId)) {
+                    state.favoritePosts = state.favoritePosts.filter((id) => {
+                        return id !== (action.payload?.payload as IFavoritePostResponse).postId
+                    });
+                } else {
+                    state.favoritePosts.push((action.payload.payload as IFavoritePostResponse).postId);
+                }
+            }
+        })
+        .addCase(addFavoritePost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

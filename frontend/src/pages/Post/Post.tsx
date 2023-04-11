@@ -5,6 +5,7 @@ import styles from "./Post.module.css";
 import Image from "../../components/Image";
 import Loading from "../../components/Loading";
 import DefaultUser from "../../components/layout/DefaultUser";
+import FlashMessage from "../../components/FlashMessage";
 
 // Icons
 import { 
@@ -39,14 +40,16 @@ import {
     likePost, 
     dislikePost, 
     insertComment,
-    deleteComment 
+    deleteComment,
+    addFavoritePost
 } from "../../slices/postSlice";
 import { resetUserStates, getUserById } from "../../slices/userSlice";
 
 const Post = () => {
     const [post, setPost] = useState<IPost | null>(null);
-    const [user, setUser] = useState<IUser | null>(null);
+    const [userPost, setUserPost] = useState<IUser | null>(null);
     const [comment, setComment] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
     const [isCommentInputFocused, setIsCommentInputFocused] = useState<boolean>(false);
     const [toggleDeleteButton, setToggleDeleteButton] = useState<boolean>(false);
     const [commentId, setCommentId] = useState<string>("");
@@ -54,7 +57,7 @@ const Post = () => {
     const { id } = useParams();
 
     const dispatch = useDispatch<AppDispatch>();
-    const { payload: postPayload, loading: postLoading, post: postState } = useSelector((state: RootState) => state.post);
+    const { payload: postPayload, loading: postLoading, post: postState, favoritePosts } = useSelector((state: RootState) => state.post);
     const { payload: userPayload } = useSelector((state: RootState) => state.user);
     const { user: authUser } = useSelector((state: RootState) => state.auth);
 
@@ -70,6 +73,10 @@ const Post = () => {
                     setPost(postPayload.payload as IPost);
                     dispatch(resetPostStates());
                 }
+
+                if(postPayload.message.includes("adicionado aos favoritos")) {
+                    setMessage(postPayload.message);
+                }
             }
         }
     }, [postPayload]);
@@ -83,11 +90,21 @@ const Post = () => {
     useEffect(() => {
         if(userPayload) {
             if(userPayload.status === "success") {
-                setUser(userPayload.payload as IUser);
+                setUserPost(userPayload.payload as IUser);
                 dispatch(resetUserStates());
             }
         }
     }, [userPayload]);
+
+    useEffect(() => {
+        if(message) {
+            const timer = setTimeout(() => {
+                setMessage("");
+            }, 1800);
+
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     const like = async () => {
         if(!id) return;
@@ -134,28 +151,30 @@ const Post = () => {
         setToggleDeleteButton(false);
     }
 
-    // console.log("POST: ", postState);
-    console.log("POST PAYLOAD: ", postPayload);
+    const handleFavoritePost = async () => {
+        if(!id) return;
+        await dispatch(addFavoritePost(id));
+    }
 
     return (
         <div className={styles.postDetails_container}>
-            {(!post || !user) && <Loading />}
-            {post && user && (
+            {(!post || !userPost) && <Loading />}
+            {post && userPost && (
             <>
                 <div className={styles.postDetails}>
                     <h1>{post.title}</h1>
                     <div className={styles.user}>
                         Publicado por:
                         <Image 
-                            src={`${uploads}/users/${user.profileImage}`}
-                            alt={user.name}
+                            src={`${uploads}/users/${userPost.profileImage}`}
+                            alt={userPost.name}
                             width="30px"
                             height="30px"
                             placeholderWidth="30px"
                             placeholderHeight="30px"
                             borderRadius="50%"
                         />
-                        <Link to={`/users/${user._id}`}>{user.name}</Link>
+                        <Link to={`/users/${userPost._id}`}>{userPost.name}</Link>
                     </div>
                     <div className={styles.tags}>
                         {post.tags.map((tag) => (
@@ -196,11 +215,16 @@ const Post = () => {
                                 </div>
                             </div>
                             <div className={styles.favorite}>
-                                <button type="button"><BsBookmarkStar /></button>
+                                <button type="button" onClick={handleFavoritePost}>
+                                    {favoritePosts.length > 0 && favoritePosts.includes(post._id) ? 
+                                        <BsFillBookmarkStarFill /> : <BsBookmarkStar />
+                                    }
+                                </button>
                             </div>
                         </>
                         )}
                     </div>
+                    {message && <FlashMessage type="success" message={message} />}
                 </div>
                 <div className={styles.comments_container}>
                     {postState && (

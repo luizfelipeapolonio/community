@@ -1,6 +1,7 @@
 import { IApiResponse, IPost } from "./shared.types";
 
 export interface IPostInitialState {
+    favoritePosts: string[];
     post: IPost | null;
     loading: boolean;
     success: boolean;
@@ -26,4 +27,9 @@ export interface ILikeDislikeResponse extends IApiResponse {
         userName: string;
         postId: string;
     };
+}
+
+export interface IFavoritePostResponse {
+    postId: string;
+    title: string;
 }
