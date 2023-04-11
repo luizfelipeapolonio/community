@@ -622,15 +622,12 @@ export class PostController {
             if(!user) {
                 return res.status(404).json({
                     status: "error", 
-                    message: "Usuário não encontrado!"
+                    message: "Usuário não encontrado!",
+                    payload: null
                 });
             }
 
-            const favoritePosts = {
-                userId: user._id,
-                userName: user.name,
-                favoritePosts: user.favoritePosts
-            }
+            const favoritePosts = await PostModel.find({ _id: user.favoritePosts.map(id => id) }).sort([["createdAt", -1]]).exec();
 
             return res.status(200).json({
                 status: "success",
