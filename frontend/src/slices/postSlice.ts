@@ -236,6 +236,19 @@ export const getFavoritePosts = createAsyncThunk<IApiResponse | null, void, {sta
     }
 );
 
+export const searchPost = createAsyncThunk(
+    "post/search",
+    async (query: string, thunkAPI) => {
+        const data = await postService.searchPost(query);
+
+        if(data && data.status === "error") {
+            return thunkAPI.rejectWithValue(data);
+        }
+
+        return data;
+    }
+);
+
 const postSlice = createSlice({
     name: "post",
     initialState,
@@ -508,6 +521,23 @@ const postSlice = createSlice({
             state.payload = action.payload;
         })
         .addCase(getFavoritePosts.rejected, (state, action) => {
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+            state.payload = action.payload as IApiResponse;
+        })
+        .addCase(searchPost.pending, (state) => {
+            state.loading = true;
+            state.success = false;
+            state.error = false;
+        })
+        .addCase(searchPost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = false;
+            state.payload = action.payload;
+        })
+        .addCase(searchPost.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;

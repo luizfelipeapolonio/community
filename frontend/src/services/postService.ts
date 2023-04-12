@@ -186,6 +186,21 @@ const getFavoritePosts = async (token: string): Promise<IApiResponse | null> => 
     }
 }
 
+const searchPost = async (query: string): Promise<IApiResponse | null> => {
+    const config = requestConfig("GET", null, null, false);
+
+    try {
+        const response = await fetch(api + `/posts/search?q=${query}`, config);
+        const data: IApiResponse = await response.json();
+
+        return data;
+
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const postService = {
     getUserPosts,
     getAllPosts,
@@ -198,7 +213,8 @@ const postService = {
     insertComment,
     deleteComment,
     addFavoritePost,
-    getFavoritePosts
+    getFavoritePosts,
+    searchPost
 }
 
 export default postService;

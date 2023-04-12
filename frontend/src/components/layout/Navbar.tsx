@@ -17,7 +17,8 @@ import {
 import { Link, NavLink } from "react-router-dom";
 
 // Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -35,6 +36,9 @@ const Navbar = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [error, setError] = useState<boolean>(false);
     const [toggleMenu, setToggleMenu] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+
+    const navigate = useNavigate();
 
     const { auth, loading } = useAuth();
     const { payload, error: userError } = useSelector((state: RootState) => state.user);
@@ -94,6 +98,15 @@ const Navbar = () => {
         setToggleMenu("");
     }
 
+    const handleSearch = (e: FormEvent) => {
+        e.preventDefault();
+        setSearch("");
+
+        if(search) {
+            return navigate(`/search?q=${search}`);
+        }
+    }
+
     return (
         <nav className={styles.nav_container}>
             <div className={styles.logo}>
@@ -102,8 +115,13 @@ const Navbar = () => {
                     <h1>Community</h1>
                 </Link>
             </div>
-            <form className={styles.search}>
-                <input type="text" placeholder="Busque pelo título ou tag" />
+            <form className={styles.search} onSubmit={handleSearch} >
+                <input 
+                    type="text" 
+                    placeholder="Busque pelo título ou tag" 
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
                 <button><FaSearch /></button>
             </form>
             {auth && !loading ? (
