@@ -14,8 +14,6 @@ const register = async (data: IUserRegisterBody): Promise<IApiResponse | null> =
         const response = await fetch(api + "/users/register", config as RequestInit);
         const data: IApiResponse = await response.json();
 
-        console.log(data);
-
         return data;
 
     } catch(error) {
@@ -34,8 +32,6 @@ const login = async (data: IUserLoginBody) => {
         if(data.status === "success") {
             localStorage.setItem("user", JSON.stringify(data.payload));
         }
-
-        console.log(data);
 
         return data;
 

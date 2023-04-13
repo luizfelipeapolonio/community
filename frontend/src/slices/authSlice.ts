@@ -86,8 +86,6 @@ export const authSlice = createSlice({
             state.success = false;
             state.error = false;
             state.payload = null;
-
-            console.log("LOGIN PENDING USER: ", state.user);
         })
         .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
@@ -95,24 +93,17 @@ export const authSlice = createSlice({
             state.error = false;
             state.payload = action.payload;
             state.user = getUserFromLocalStorage();
-
-            console.log("LOGIN FULFILLED PAYLOAD: ", state.payload);
         })
         .addCase(login.rejected, (state, action) => {
             state.loading = false;
             state.success = false;
             state.error = true;
             state.payload = action.payload as IApiResponse;
-
-            console.log("LOGIN REJECTED PAYLOAD: ", state.payload);
         })
         .addCase(logout.pending, (state) => {
             state.loading = true;
             state.success = false;
             state.error = false;
-
-            console.log("LOGOUT PENDING USER: ", state.user);
-            console.log("LOGOUT PENDING LOADING: ", state.loading);
         })
         .addCase(logout.fulfilled, (state) => {
             state.user = null;
@@ -121,7 +112,6 @@ export const authSlice = createSlice({
             state.error = false;
 
             console.log("LOGOUT FULFILLED USER: ", state.user);
-            console.log("LOGOUT FULFILLED LOADING: ", state.loading);
         })
     }
 });
