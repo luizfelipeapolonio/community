@@ -2,6 +2,7 @@ import styles from "./App.module.css";
 
 // Components
 import Root from "./components/layout/Root";
+import RootBoundary from "./components/layout/RootBoundary";
 
 // Pages
 import Home from "./pages/Home/Home";
@@ -31,7 +32,7 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Root />}>
+      <Route path="/" element={<Root />} errorElement={<RootBoundary />}>
         <Route index path="/" element={<Home />} />
         <Route path="/post" element={auth ? <CreatePost /> : <Navigate to="/login" />} />
         <Route path="/post/:id/edit" element={auth ? <EditPost /> : <Navigate to="/login" />} />
