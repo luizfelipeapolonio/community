@@ -158,3 +158,37 @@
     color: #a8a8b3;
     cursor: not-allowed;
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 1070px) {
+    .postform_container {
+        width: 55%;
+    }
+}
+
+@media (max-width: 720px) {
+    .postform_container {
+        width: 70%;
+    }
+}
+
+@media (max-width: 570px) {
+    .postform_container {
+        width: 90%;
+    }
+}
+
+@media (max-width: 334px) {
+    .postform_container form img {
+        max-width: 250px;
+    }
+
+    .postform_container .postedImage div:nth-child(1) {
+        max-width: 250px;
+    }
+
+    .postform_container .postedImage img {
+        max-width: 250px;
+    }
+}

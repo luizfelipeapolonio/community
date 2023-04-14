@@ -9,6 +9,7 @@
     font-size: 2.5rem;
     gap: 1rem;
     color: #c4c4c4;
+    text-align: center;
 }
 
 .notFound_container svg,

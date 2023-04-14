@@ -144,3 +144,23 @@
     font-size: 1.6rem;
     color: #545456;
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 990px) {
+    .edit_container {
+        width: 60%;
+    }
+}
+
+@media (max-width: 660px) {
+    .edit_container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 500px) {
+    .edit_container {
+        width: 90%;
+    }
+}

@@ -71,3 +71,29 @@
         transform: translateY(0px);
     }
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 1030px) {
+    .deleteModal_container {
+        width: 55%;
+    }
+}
+
+@media (max-width: 730px) {
+    .deleteModal_container {
+        width: 68%;
+    }
+}
+
+@media (max-width: 570px) {
+    .deleteModal_container {
+        width: 83%;
+    }
+}
+
+@media (max-width: 460px) {
+    .deleteModal_container {
+        width: 93%;
+    }
+}

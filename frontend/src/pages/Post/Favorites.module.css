@@ -12,3 +12,29 @@
     margin-bottom: 2.6rem;
     color: #c4c4c4;
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 1050px) {
+    .favorites_container {
+        width: 55%;
+    }
+}
+
+@media (max-width: 760px) {
+    .favorites_container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 550px) {
+    .favorites_container {
+        width: 95%;
+    }
+}
+
+@media (max-width: 380px) {
+    .favorites_container h1 {
+        font-size: 2.6rem;
+    }
+}

@@ -141,3 +141,23 @@
 .redirect a:hover {
     color: #037e51;
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 1000px) {
+    .form_container {
+        width: 50%;
+    }
+}
+
+@media (max-width: 650px) {
+    .form_container {
+        width: 70%;
+    }
+}
+
+@media (max-width: 490px) {
+    .form_container {
+        width: 90%;
+    }
+}

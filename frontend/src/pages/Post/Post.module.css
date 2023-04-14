@@ -292,3 +292,23 @@
         opacity: 1;
     }
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 900px) {
+    .postDetails_container {
+        width: 70%;
+    }
+}
+
+@media (max-width: 600px) {
+    .postDetails_container {
+        width: 85%;
+    }
+}
+
+@media (max-width: 406px) {
+    .commentsList .comment .deleteComment .deleteComment_dropdown {
+        left: -68px;
+    }
+}

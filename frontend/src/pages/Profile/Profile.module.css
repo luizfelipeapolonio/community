@@ -161,4 +161,32 @@
     font-size: 2rem;
 }
 
+/* ======== Media Queries ======== */
 
+@media (max-width: 1050px) {
+    .profile_container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 680px) {
+    .profile_container {
+        width: 90%;
+    }
+}
+
+@media (max-width: 540px) {
+    .user_info {
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 494px) {
+    .user_info {
+        flex-direction: column;
+    }
+
+    .user_info div:nth-child(3) {
+        gap: 0.2rem;
+    }
+}

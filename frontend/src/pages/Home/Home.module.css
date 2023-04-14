@@ -6,3 +6,23 @@
     gap: 1.5rem;
     font-size: 1.7rem;
 }
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 1050px) {
+    .home_container {
+        width: 55%;
+    }
+}
+
+@media (max-width: 760px) {
+    .home_container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 550px) {
+    .home_container {
+        width: 95%;
+    }
+}

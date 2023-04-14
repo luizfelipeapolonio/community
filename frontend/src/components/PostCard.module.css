@@ -38,6 +38,7 @@
 .postcard .post_tags {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 0.5rem;
     margin-bottom: 2.3rem;
 }
@@ -132,4 +133,21 @@
 .social .comments svg {
     color: #4cbad3;
     font-size: 2rem;
+}
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 470px) {
+    .postcard .post_tags {
+        flex-direction: column;
+    }
+
+    .post_content {
+        flex-direction: column;
+    }
+
+    .post_content .content,
+    .post_content .post_image {
+        width: 100%;
+    }
 }
