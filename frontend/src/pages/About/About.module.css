@@ -1,0 +1,27 @@
+.about_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60%;
+    font-size: 1.7rem;
+}
+
+.about_container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #00b37e;
+}
+
+.about_container p {
+    text-indent: 3rem;
+    line-height: 2.5rem;
+    color: #a8a8b3;
+}
+
+/* ======== Media Queries ======== */
+
+@media (max-width: 530px) {
+    .about_container {
+        width: 90%;
+    }
+}

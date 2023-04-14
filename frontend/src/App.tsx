@@ -15,6 +15,7 @@ import EditPost from "./pages/Post/EditPost";
 import Post from "./pages/Post/Post";
 import Favorites from "./pages/Post/Favorites";
 import Search from "./pages/Search/Search";
+import About from "./pages/About/About";
 
 import { 
   createBrowserRouter, 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/users/:id" element={auth ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/favorites" element={auth ? <Favorites /> : <Navigate to="/" />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/about" element={<About />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
       </Route>
