@@ -220,7 +220,7 @@ const Navbar = () => {
                             </Link>
                             </>
                         )}
-                        <Link to="#" className={styles.about} onClick={closeDropdownMenu}>
+                        <Link to="/about" className={styles.about} onClick={closeDropdownMenu}>
                             <div><FaInfoCircle /></div>
                             <span>Sobre</span>
                         </Link>
