@@ -60,7 +60,7 @@ O Community é uma aplicação de interatividade em um formato semelhante a um b
 <br />
 
 <h1 id="backend">Back-end</h1>
-Esta aplicação é uma API desenvolvida sob a arquitetura MVC em NodeJS, em conjunto com o framework Express JS e o banco de dados MongoDB. Para autenticação, foi utilizado a biblioteca JSON Web Token (JWT), e bcryptjs para criptografia dos dados. Para o upload de imagens, foi utilizado a biblioteca Multer, e bibliotecas como o Morgan e Winston para criar e registar logs do sistema.
+Esta aplicação é uma API REST desenvolvida em NodeJS, em conjunto com o framework Express JS e o banco de dados MongoDB. Para autenticação, foi utilizado a biblioteca JSON Web Token (JWT), e bcryptjs para criptografia dos dados. Para o upload de imagens, foi utilizado a biblioteca Multer, e bibliotecas como o Morgan e Winston para criar e registar logs do sistema.
 <br /><br />
 
 ## 💻 Tecnologias utilizadas
