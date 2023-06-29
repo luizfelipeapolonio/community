@@ -48,10 +48,8 @@ const CreatePost = () => {
         const formData: FormData = new FormData();
 
         Object.entries(post).forEach((value) => {
-            if(value[1] instanceof Array<string>) {
-                const tagsArray = value[1] as string[];
-
-                tagsArray.map((tag, index) => {
+            if(value[1] instanceof Array) {
+                value[1].forEach((tag, index) => {
                     formData.append(`tags[${index}]`, tag);
                 });
             } else {
